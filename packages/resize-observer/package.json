@@ -1,0 +1,43 @@
+{
+  "name": "@dgkit/resize-observer",
+  "version": "0.0.0",
+  "description": "A lightweight, standalone and SSR-safe Angular ResizeObserver directive.",
+  "author": {
+    "name": "Daniel Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/resize-observer#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/resize-observer"
+  },
+  "keywords": [
+    "angular",
+    "resize-observer",
+    "directive",
+    "standalone",
+    "responsive",
+    "element-resize",
+    "observer",
+    "ssr",
+    "signals",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=18.0.0 <22.0.0",
+    "@angular/core": ">=18.0.0 <22.0.0",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

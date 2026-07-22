@@ -1,0 +1,46 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "resize-observer",
+  "projectType": "library",
+  "sourceRoot": "packages/resize-observer/src",
+  "tags": ["scope:public", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/resize-observer"],
+      "options": {
+        "command": "ng-packagr -p packages/resize-observer/ng-package.json -c packages/resize-observer/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/packages/resize-observer/jest"],
+      "options": {
+        "command": "jest --config packages/resize-observer/jest.config.ts --coverage"
+      }
+    },
+    "test-vitest": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/packages/resize-observer/vitest"],
+      "options": {
+        "command": "vitest run --config packages/resize-observer/vitest.config.ts --coverage"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint packages/resize-observer/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "tsc -p packages/resize-observer/tsconfig.lib.json --noEmit",
+          "tsc -p packages/resize-observer/tsconfig.spec.json --noEmit"
+        ]
+      }
+    }
+  }
+}

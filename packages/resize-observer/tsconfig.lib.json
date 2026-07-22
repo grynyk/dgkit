@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/packages/resize-observer",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "types": []
+  },
+  "angularCompilerOptions": {
+    "compilationMode": "partial"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.shared-spec.ts",
+    "src/**/testing/**",
+    "src/test-setup.ts",
+    "src/test-setup.vitest.ts",
+    "jest.config.ts",
+    "vitest.config.ts"
+  ]
+}
