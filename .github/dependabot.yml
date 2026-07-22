@@ -1,0 +1,50 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    versioning-strategy: increase-if-necessary
+    labels:
+      - dependencies
+    groups:
+      angular:
+        patterns:
+          - '@angular/*'
+          - 'ng-packagr'
+          - 'zone.js'
+      nx:
+        patterns:
+          - 'nx'
+          - '@nx/*'
+      linting:
+        patterns:
+          - 'eslint'
+          - '@eslint/*'
+          - 'typescript-eslint'
+          - 'angular-eslint'
+          - 'prettier'
+          - 'eslint-config-prettier'
+      testing:
+        patterns:
+          - 'jest*'
+          - '@types/jest'
+          - 'vitest'
+          - '@vitest/*'
+          - '@analogjs/*'
+          - 'jsdom'
+    ignore:
+      # Angular is a peer dependency; majors are upgraded deliberately.
+      - dependency-name: '@angular/*'
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - ci
