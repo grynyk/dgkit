@@ -1,0 +1,6 @@
+# Example npm authentication for publishing @dgkit packages.
+# DO NOT commit a real token. In CI this file is generated from the NPM_TOKEN
+# repository secret; locally, export NPM_TOKEN in your shell instead.
+#
+# //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+# @dgkit:registry=https://registry.npmjs.org/

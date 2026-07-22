@@ -1,28 +1,49 @@
-# Angular specific
-/dist/
-/out-tsc/
-/tmp/
-/coverage/
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Foreign lockfiles — this workspace is pnpm-only
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+tmp/
+out-tsc/
 /e2e/test-output/
-/.angular/
-.angular/
 
-# Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
+# Nx
+.nx/cache
+.nx/workspace-data
 
-# Environment files
-/.env
-
-# Angular CLI and build artefacts
-/.angular-cli.json
-/.ng/
-
-# TypeScript cache
-*.tsbuildinfo
+# Testing / coverage
+coverage/
+*.lcov
 
 # Logs
+*.log
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Editor / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# Env / secrets — never commit these
+.env
+.env.*
+!.env.example
+# The workspace-level .npmrc is committed (it holds no secrets). A token-bearing
+# .npmrc must only ever exist in CI via ${NPM_TOKEN}, never committed here.
+.npmrc.local
+
+# Angular / build caches
+.angular/
+/.angular-cli.json
+/.ng/
+*.tsbuildinfo
