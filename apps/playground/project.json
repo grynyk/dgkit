@@ -1,0 +1,35 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "playground",
+  "projectType": "application",
+  "sourceRoot": "apps/playground/src",
+  "tags": ["scope:playground", "type:app"],
+  "implicitDependencies": ["resize-observer"],
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite serve apps/playground --config apps/playground/vite.config.ts"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/apps/playground"],
+      "options": {
+        "command": "vite build apps/playground --config apps/playground/vite.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint apps/playground/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p apps/playground/tsconfig.app.json --noEmit"
+      }
+    }
+  }
+}

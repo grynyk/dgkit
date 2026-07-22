@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/apps/playground",
+    "types": ["node"],
+    "target": "ES2022"
+  },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.ts"]
+}
