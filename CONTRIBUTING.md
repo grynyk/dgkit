@@ -19,8 +19,7 @@ pnpm install
 
 ```bash
 pnpm build            # build all packages
-pnpm test             # Jest (all packages)
-pnpm test:vitest      # Vitest (all packages)
+pnpm test             # Vitest + coverage (all packages)
 pnpm lint             # ESLint (type-aware)
 pnpm typecheck        # tsc --noEmit
 pnpm format           # Prettier --write
@@ -38,14 +37,16 @@ changes touched.
   ESLint. Fix issues; do not leave `TODO`s or disable rules without a reason.
 - **SSR-safe** — never touch browser globals in field initializers; guard with
   `isPlatformBrowser` and feature detection.
-- **Every package is tested by both Jest and Vitest**, ideally via one shared
-  behavioral suite (see `resize-observer` for the pattern).
+- **Every package is tested with Vitest** (Angular packages via the Analog
+  plugin; framework-free packages run plain). See `resize-observer` for the
+  signal-API + directive pattern.
 - **Coverage thresholds**: statements 95%, branches 90%, functions 95%, lines 95%.
 
 ## Adding a package
 
 ```bash
-pnpm new:package <name> "<one-line description>"
+pnpm new:package <name> "<one-line description>"        # Angular package
+pnpm new:package <name> "<description>" --pure          # no Angular peers
 ```
 
 Then implement it, document it in its `README.md`, and add it to the table in the

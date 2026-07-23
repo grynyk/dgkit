@@ -26,7 +26,14 @@
     "noUnusedParameters": true,
     "useDefineForClassFields": false,
     "paths": {
-      "@dgkit/resize-observer": ["packages/resize-observer/src/index.ts"]
+      "@dgkit/resize-observer": ["packages/resize-observer/src/index.ts"],
+      "@dgkit/intersection-observer": [
+        "packages/intersection-observer/src/index.ts"
+      ],
+      "@dgkit/format": ["packages/format/src/index.ts"],
+      "@dgkit/clipboard": ["packages/clipboard/src/index.ts"],
+      "@dgkit/signal-history": ["packages/signal-history/src/index.ts"],
+      "@dgkit/route-state": ["packages/route-state/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

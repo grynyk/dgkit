@@ -17,16 +17,25 @@ Published under the [`@dgkit`](https://www.npmjs.com/org/dgkit) npm scope.
 
 Each package is independently **buildable, testable, versioned and publishable**,
 built with modern Angular standalone + signals APIs, configured for tree-shaking,
-and validated in CI with both **Jest** and **Vitest**.
+and validated in CI with Vitest and enforced coverage thresholds.
 
 ## Packages
 
-| Package                                                | Description                                              | Status  |
-| ------------------------------------------------------ | -------------------------------------------------------- | ------- |
-| [`@dgkit/resize-observer`](./packages/resize-observer) | Standalone, SSR-safe Angular `ResizeObserver` directive. | ✅ Live |
+| Package                                                            | Description                                                           |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| [`@dgkit/route-state`](./packages/route-state)                     | Type-safe, bidirectional sync between signals and route/query params. |
+| [`@dgkit/resize-observer`](./packages/resize-observer)             | SSR-safe `ResizeObserver` — signal API + directive.                   |
+| [`@dgkit/intersection-observer`](./packages/intersection-observer) | SSR-safe `IntersectionObserver` — signal API + directive.             |
+| [`@dgkit/signal-history`](./packages/signal-history)               | Undo/redo for signals, with grouped transactions.                     |
+| [`@dgkit/clipboard`](./packages/clipboard)                         | Clipboard helper with signal-based operation state.                   |
+| [`@dgkit/format`](./packages/format)                               | Framework-free, grapheme-safe string/number formatting.               |
 
-Planned: `@dgkit/intersection-observer`, `@dgkit/media-query`, `@dgkit/viewport`,
-`@dgkit/click-outside`, `@dgkit/storage`, `@dgkit/clipboard`.
+Every package is standalone, tree-shakeable, SSR-safe and **zoneless-friendly** —
+native callbacks write signals directly, with no `NgZone` and no assumption that
+zone.js is loaded.
+
+Planned: `@dgkit/media-query`, `@dgkit/viewport`, `@dgkit/click-outside`,
+`@dgkit/storage`.
 
 ## Tech stack
 
@@ -34,7 +43,7 @@ Planned: `@dgkit/intersection-observer`, `@dgkit/media-query`, `@dgkit/viewport`
 - **[pnpm](https://pnpm.io)** workspaces
 - **Angular 21** (standalone + signals), **TypeScript 5.9**, **RxJS 7**
 - **[ng-packagr](https://github.com/ng-packagr/ng-packagr)** — Angular Package Format builds
-- **Jest** _and_ **Vitest** — every package is tested by both runners
+- **Vitest** (+ Analog) — every package tested with enforced coverage thresholds
 - **ESLint** (type-aware) + **Prettier**
 - **[Changesets](https://github.com/changesets/changesets)** — independent versioning & changelogs
 - **GitHub Actions** — CI + release with npm provenance
@@ -54,13 +63,12 @@ pnpm install
 
 ```bash
 pnpm build                 # build every package (nx run-many -t build)
-pnpm test                  # Jest across all packages
-pnpm test:vitest           # Vitest across all packages
-pnpm lint                  # ESLint
+pnpm test                  # Vitest + coverage across all packages
+pnpm lint                  # ESLint (type-aware)
 pnpm typecheck             # tsc --noEmit
 pnpm format                # Prettier write
 pnpm playground            # serve the demo app (nx serve playground)
-pnpm verify                # format:check + lint + typecheck + test + vitest + build
+pnpm verify                # format:check + lint + typecheck + test + build
 ```
 
 Target a single project with Nx:
@@ -68,17 +76,17 @@ Target a single project with Nx:
 ```bash
 pnpm nx build resize-observer
 pnpm nx test resize-observer
-pnpm nx test-vitest resize-observer
 ```
 
 ## Adding a new package
 
 ```bash
-pnpm new:package intersection-observer "Angular IntersectionObserver directive."
+pnpm new:package media-query "Angular media-query utilities."
+pnpm new:package slugify "String slug helpers." --pure   # no Angular peers
 ```
 
 This scaffolds `packages/<name>/` from the resize-observer template with its own
-`package.json`, `project.json`, `ng-package.json`, tsconfigs, Jest/Vitest configs,
+`package.json`, `project.json`, `ng-package.json`, tsconfigs, a Vitest config,
 README and CHANGELOG, wired into the workspace. See
 [`tools/create-package.mjs`](./tools/create-package.mjs).
 
@@ -87,7 +95,12 @@ README and CHANGELOG, wired into the workspace. See
 ```text
 dgkit/
 ├── packages/            # publishable @dgkit/* libraries
-│   └── resize-observer/
+│   ├── route-state/
+│   ├── resize-observer/
+│   ├── intersection-observer/
+│   ├── signal-history/
+│   ├── clipboard/
+│   └── format/
 ├── apps/
 │   └── playground/      # manual verification app (not published)
 ├── tools/               # workspace tooling (package scaffolder)
