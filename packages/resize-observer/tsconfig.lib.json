@@ -13,11 +13,8 @@
   "include": ["src/**/*.ts"],
   "exclude": [
     "src/**/*.spec.ts",
-    "src/**/*.shared-spec.ts",
     "src/**/testing/**",
     "src/test-setup.ts",
-    "src/test-setup.vitest.ts",
-    "jest.config.ts",
     "vitest.config.ts"
   ]
 }

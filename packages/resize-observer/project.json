@@ -14,14 +14,7 @@
     },
     "test": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/packages/resize-observer/jest"],
-      "options": {
-        "command": "jest --config packages/resize-observer/jest.config.ts --coverage"
-      }
-    },
-    "test-vitest": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/packages/resize-observer/vitest"],
+      "outputs": ["{workspaceRoot}/coverage/packages/resize-observer"],
       "options": {
         "command": "vitest run --config packages/resize-observer/vitest.config.ts --coverage"
       }

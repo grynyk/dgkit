@@ -59,12 +59,7 @@ export default tseslint.config(
     rules: {},
   },
   {
-    files: [
-      '**/*.spec.ts',
-      '**/*.shared-spec.ts',
-      '**/testing/**/*.ts',
-      '**/test-setup*.ts',
-    ],
+    files: ['**/*.spec.ts', '**/testing/**/*.ts', '**/test-setup.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',

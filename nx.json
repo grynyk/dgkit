@@ -6,11 +6,8 @@
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+spec.ts",
-      "!{projectRoot}/**/*.shared-spec.ts",
       "!{projectRoot}/**/testing/**",
       "!{projectRoot}/src/test-setup.ts",
-      "!{projectRoot}/src/test-setup.vitest.ts",
-      "!{projectRoot}/jest.config.ts",
       "!{projectRoot}/vitest.config.ts",
       "!{projectRoot}/tsconfig.spec.json"
     ],
@@ -27,10 +24,6 @@
       "cache": true
     },
     "test": {
-      "inputs": ["default", "^production"],
-      "cache": true
-    },
-    "test-vitest": {
       "inputs": ["default", "^production"],
       "cache": true
     },

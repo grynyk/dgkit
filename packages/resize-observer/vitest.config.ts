@@ -14,20 +14,19 @@ export default defineConfig({
   ],
   test: {
     // Analog's zone setup patches the global lifecycle hooks, so globals must
-    // be enabled. The shared suite still receives Vitest's primitives explicitly.
+    // be enabled. Specs still import their primitives from 'vitest' explicitly.
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['src/test-setup.vitest.ts'],
-    include: ['src/**/*.vitest.spec.ts'],
+    setupFiles: ['src/test-setup.ts'],
+    include: ['src/**/*.spec.ts'],
     reporters: ['default'],
     coverage: {
       provider: 'v8',
-      reportsDirectory: '../../coverage/packages/resize-observer/vitest',
+      reportsDirectory: '../../coverage/packages/resize-observer',
       reporter: ['text', 'lcov'],
       include: ['src/lib/**/*.ts'],
       exclude: [
         'src/lib/**/*.spec.ts',
-        'src/lib/**/*.shared-spec.ts',
         'src/lib/**/*.types.ts',
         'src/lib/testing/**',
       ],

@@ -29,8 +29,6 @@ updates:
           - 'eslint-config-prettier'
       testing:
         patterns:
-          - 'jest*'
-          - '@types/jest'
           - 'vitest'
           - '@vitest/*'
           - '@analogjs/*'

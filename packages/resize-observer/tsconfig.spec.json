@@ -4,7 +4,7 @@
     "outDir": "../../dist/out-tsc/packages/resize-observer-spec",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "types": ["jest", "node"],
+    "types": ["node", "vitest/globals"],
     "esModuleInterop": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -12,11 +12,8 @@
   },
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.shared-spec.ts",
     "src/**/testing/**/*.ts",
     "src/test-setup.ts",
-    "src/test-setup.vitest.ts",
-    "jest.config.ts",
     "vitest.config.ts"
   ]
 }

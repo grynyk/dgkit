@@ -52,11 +52,8 @@ jobs:
       - name: Typecheck
         run: pnpm nx affected -t typecheck --base=$NX_BASE --head=$NX_HEAD
 
-      - name: Unit tests (Jest) + coverage
-        run: pnpm nx affected -t test --base=$NX_BASE --head=$NX_HEAD
-
       - name: Unit tests (Vitest) + coverage
-        run: pnpm nx affected -t test-vitest --base=$NX_BASE --head=$NX_HEAD
+        run: pnpm nx affected -t test --base=$NX_BASE --head=$NX_HEAD
 
       - name: Build
         run: pnpm nx affected -t build --base=$NX_BASE --head=$NX_HEAD
@@ -72,7 +69,7 @@ jobs:
               const data = JSON.parse(require("fs").readFileSync(0, "utf8"))[0];
               console.log(`${data.name}@${data.version} — ${data.files.length} files, ${data.entryCount} entries`);
               for (const f of data.files) console.log("  " + f.path);
-              const forbidden = data.files.filter((f) => /\.(spec|shared-spec)\.|test-setup|\/testing\//.test(f.path));
+              const forbidden = data.files.filter((f) => /\.spec\.|test-setup|\/testing\//.test(f.path));
               if (forbidden.length) { console.error("Forbidden files in package:", forbidden.map(f=>f.path)); process.exit(1); }
             '
             echo "::endgroup::"
