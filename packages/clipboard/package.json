@@ -1,0 +1,38 @@
+{
+  "name": "@dgkit/clipboard",
+  "version": "0.0.0",
+  "description": "SSR-safe Angular clipboard helper with signal-based operation state.",
+  "author": {
+    "name": "Danylo Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/clipboard#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/clipboard"
+  },
+  "keywords": [
+    "angular",
+    "standalone",
+    "ssr",
+    "clipboard",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=18.0.0 <22.0.0",
+    "@angular/core": ">=18.0.0 <22.0.0",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
