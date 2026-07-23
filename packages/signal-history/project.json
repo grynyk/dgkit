@@ -1,0 +1,39 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "signal-history",
+  "projectType": "library",
+  "sourceRoot": "packages/signal-history/src",
+  "tags": ["scope:public", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/signal-history"],
+      "options": {
+        "command": "ng-packagr -p packages/signal-history/ng-package.json -c packages/signal-history/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/packages/signal-history"],
+      "options": {
+        "command": "vitest run --config packages/signal-history/vitest.config.ts --coverage"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint packages/signal-history/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "tsc -p packages/signal-history/tsconfig.lib.json --noEmit",
+          "tsc -p packages/signal-history/tsconfig.spec.json --noEmit"
+        ]
+      }
+    }
+  }
+}
