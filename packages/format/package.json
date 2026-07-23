@@ -1,0 +1,33 @@
+{
+  "name": "@dgkit/format",
+  "version": "0.0.0",
+  "description": "Framework-free string and number formatting helpers, including grapheme-safe truncation.",
+  "author": {
+    "name": "Danylo Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/format#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/format"
+  },
+  "keywords": [
+    "angular",
+    "standalone",
+    "ssr",
+    "format",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
