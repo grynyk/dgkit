@@ -1,0 +1,39 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "route-state",
+  "projectType": "library",
+  "sourceRoot": "packages/route-state/src",
+  "tags": ["scope:public", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/route-state"],
+      "options": {
+        "command": "ng-packagr -p packages/route-state/ng-package.json -c packages/route-state/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/packages/route-state"],
+      "options": {
+        "command": "vitest run --config packages/route-state/vitest.config.ts --coverage"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint packages/route-state/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "tsc -p packages/route-state/tsconfig.lib.json --noEmit",
+          "tsc -p packages/route-state/tsconfig.spec.json --noEmit"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@dgkit/route-state",
+  "version": "0.0.0",
+  "description": "Type-safe, bidirectional synchronization between Angular signals and route/query params.",
+  "author": {
+    "name": "Danylo Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/route-state#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/route-state"
+  },
+  "keywords": [
+    "angular",
+    "router",
+    "query-params",
+    "signals",
+    "route",
+    "state",
+    "url",
+    "ssr",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=18.0.0 <22.0.0",
+    "@angular/core": ">=18.0.0 <22.0.0",
+    "@angular/router": ">=18.0.0 <22.0.0",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
