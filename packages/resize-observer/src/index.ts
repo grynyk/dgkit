@@ -1,8 +1,17 @@
 /**
  * Public API of `@dgkit/resize-observer`.
  *
- * Everything a consumer needs and nothing more — the directive, its event type
- * and the box union. Implementation helpers under `./lib` stay private.
+ * A signal API (`injectResizeObserver`) and a directive
+ * (`ResizeObserverDirective`), both built on the same observation engine.
+ * Implementation helpers under `./lib` stay private.
  */
+export { injectResizeObserver } from './lib/resize-observer.signal';
 export { ResizeObserverDirective } from './lib/resize-observer.directive';
-export type { DgResizeEvent, DgResizeBox } from './lib/resize-observer.types';
+export type {
+  DgResizeBox,
+  DgResizeEvent,
+  DgResizeObserverOptions,
+  DgResizeObserverRef,
+  DgResizeTarget,
+  DgValueOrAccessor,
+} from './lib/resize-observer.types';

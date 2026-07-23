@@ -106,6 +106,25 @@ function selectBoxSizeArray(
   }
 }
 
+/**
+ * Normalize `T | (() => T) | undefined` into a plain accessor.
+ *
+ * Signals are zero-argument functions, so passing a signal makes the resulting
+ * option reactive with no extra ceremony.
+ */
+export function toAccessor<T>(
+  value: T | (() => T) | undefined,
+  fallback: T,
+): () => T {
+  if (value === undefined) {
+    return () => fallback;
+  }
+  if (typeof value === 'function') {
+    return value as () => T;
+  }
+  return () => value;
+}
+
 /** Compare two events by their measured dimensions (used for distinct mode). */
 export function dimensionsEqual(a: DgResizeEvent, b: DgResizeEvent): boolean {
   return a.width === b.width && a.height === b.height;

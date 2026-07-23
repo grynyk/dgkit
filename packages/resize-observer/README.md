@@ -1,16 +1,18 @@
 # @dgkit/resize-observer
 
-A lightweight, **standalone** and **SSR-safe** Angular directive around the
-native [`ResizeObserver`](https://developer.mozilla.org/docs/Web/API/ResizeObserver)
-API. Built with modern Angular signals, tree-shakeable, and shipped with zero
-runtime dependencies beyond `tslib`.
+A lightweight, **standalone** and **SSR-safe** Angular wrapper around the native
+[`ResizeObserver`](https://developer.mozilla.org/docs/Web/API/ResizeObserver)
+API. Ships **two APIs over one engine** — a signal function and a directive —
+tree-shakeable, with zero runtime dependencies beyond `tslib`.
 
-- ✅ Standalone directive — no `NgModule` required
+- ✅ `injectResizeObserver()` — element size as **signals** (`width()`, `height()`)
+- ✅ `[dgResizeObserver]` — standalone directive with a typed `(dgResize)` output
 - ✅ SSR-safe — never touches `ResizeObserver` on the server, no consumer guards
-- ✅ Signal inputs — configuration is reactive at runtime
+- ✅ Zoneless-friendly — the native callback writes a signal; **no `NgZone`, no
+  `ChangeDetectorRef`, no assumption that zone.js is loaded**
 - ✅ Configurable debounce, observation box, initial emission and distinct mode
+- ✅ Reactive config — pass signals for `box`/`debounce`; changes re-observe
 - ✅ Robust teardown via `disconnect()` — no leaks
-- ✅ Fully typed, package-owned event contract
 
 ---
 
@@ -39,7 +41,32 @@ yarn add @dgkit/resize-observer
 Angular and RxJS are **peer dependencies** — they are never bundled into the
 package.
 
-## Quick start
+## Quick start — signal API (recommended)
+
+```ts
+import { Component, ElementRef, viewChild } from '@angular/core';
+import { injectResizeObserver } from '@dgkit/resize-observer';
+
+@Component({
+  standalone: true,
+  template: `
+    <section #box>Resizable content</section>
+    <p>{{ size.width() }} × {{ size.height() }}</p>
+  `,
+})
+export class ExampleComponent {
+  private readonly box = viewChild.required<ElementRef<HTMLElement>>('box');
+
+  // Field initializers run in an injection context, so this is all you need.
+  protected readonly size = injectResizeObserver(this.box, { debounce: 100 });
+}
+```
+
+`injectResizeObserver` accepts a raw `Element`, an `ElementRef`, or an
+accessor/signal returning either (so `viewChild()` is passed straight through).
+Options may be plain values or signals; passing a signal makes them reactive.
+
+## Quick start — directive
 
 ```ts
 import { Component } from '@angular/core';
@@ -65,6 +92,30 @@ export class ExampleComponent {
   }
 }
 ```
+
+## Which API?
+
+| Use…                     | When…                                                                                                                        |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `injectResizeObserver()` | you want the size as **state** to render or derive from (signals). Defaults to emitting the initial size and de-duplicating. |
+| `[dgResizeObserver]`     | you want to **react to resize events** declaratively in a template. Defaults to suppressing the initial measurement.         |
+
+Both share the same engine and options.
+
+### Signal API reference
+
+```ts
+const size = injectResizeObserver(target, options?);
+size.width();        // Signal<number>   — 0 before the first measurement
+size.height();       // Signal<number>
+size.entry();        // Signal<ResizeObserverEntry | undefined>
+size.event();        // Signal<DgResizeEvent | undefined>
+size.isSupported();  // Signal<boolean>  — false during SSR / when unsupported
+```
+
+Options: `box`, `debounce`, `emitInitial`, `distinct` — each a value **or** a
+signal/accessor. `emitInitial` and `distinct` default to `true` here (a size
+signal should hold the current size and not churn on identical measurements).
 
 ## Full example
 
@@ -197,17 +248,17 @@ This package lives in the [`dgkit`](../../README.md) Nx monorepo.
 
 ```bash
 pnpm nx build resize-observer        # ng-packagr production build
-pnpm nx test resize-observer         # Jest + coverage
-pnpm nx test-vitest resize-observer  # Vitest + coverage
+pnpm nx test resize-observer         # Vitest + coverage
 pnpm nx lint resize-observer         # ESLint
 pnpm nx typecheck resize-observer    # tsc --noEmit
 ```
 
 ## Testing
 
-The behavioral suite is written once (`resize-observer.directive.shared-spec.ts`)
-and executed by **both** Jest and Vitest, backed by a shared framework-agnostic
-`ResizeObserver` mock. See [Development](#development) for the commands.
+Run with `pnpm nx test resize-observer`. The suite covers the directive, the
+signal API and the utilities separately, backed by a `ResizeObserver` mock that
+can simulate multiple entries, unsupported box options and an environment where
+the API is missing entirely. Coverage thresholds are enforced.
 
 ## Contributing
 
@@ -216,4 +267,4 @@ Contributions are welcome — see the repository
 
 ## License
 
-[MIT](../../LICENSE) © Daniel Grynyk
+[MIT](../../LICENSE) © Danylo Grynyk

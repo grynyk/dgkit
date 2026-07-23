@@ -1,8 +1,7 @@
 /**
  * A small, framework-agnostic `ResizeObserver` test double.
  *
- * It is shared by both the Jest and Vitest suites and supports everything the
- * directive tests need: observing/unobserving/disconnecting, inspecting the
+ * Supports everything the directive and signal-API tests need: observing/unobserving/disconnecting, inspecting the
  * observed elements and their options, and manually triggering one or many
  * entries. It also lets a test simulate an environment where `ResizeObserver`
  * does not exist at all.

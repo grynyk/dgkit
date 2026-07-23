@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "A lightweight, standalone and SSR-safe Angular ResizeObserver directive.",
   "author": {
-    "name": "Daniel Grynyk",
+    "name": "Danylo Grynyk",
     "email": "danielgrynyk@gmail.com"
   },
   "license": "MIT",
