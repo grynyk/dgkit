@@ -10,6 +10,8 @@ import {
   ResizeObserverDirective,
 } from '@dgkit/resize-observer';
 
+import { KitDemo } from './kit-demo';
+
 interface DemoState {
   readonly width: number;
   readonly height: number;
@@ -23,7 +25,7 @@ const EMPTY: DemoState = { width: 0, height: 0, count: 0, initial: false };
   selector: 'dg-root',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ResizeObserverDirective, DecimalPipe],
+  imports: [ResizeObserverDirective, DecimalPipe, KitDemo],
   template: `
     <header>
       <h1>@dgkit/resize-observer</h1>
@@ -109,6 +111,9 @@ const EMPTY: DemoState = { width: 0, height: 0, count: 0, initial: false };
         <small>{{ ds.count }} distinct event(s)</small>
       </section>
     </main>
+
+    <h2>Signal APIs</h2>
+    <dg-kit-demo />
 
     <footer>
       <p>
