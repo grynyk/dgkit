@@ -39,6 +39,8 @@ export function signalHistory<T>(
   options: DgSignalHistoryOptions<T> = {},
 ): DgSignalHistory<T> {
   const { limit = 100, debounce = 0, equal = Object.is } = options;
+  // A fractional limit would leak into `slice`; keep it a whole number.
+  const maxEntries = Math.floor(limit);
 
   const destroyRef = inject(DestroyRef);
 
@@ -57,8 +59,9 @@ export function signalHistory<T>(
   let coalescing = false;
   let coalesceTimer: ReturnType<typeof setTimeout> | undefined;
   let destroyed = false;
+  let paused = false;
 
-  const hasLimit = Number.isFinite(limit) && limit > 0;
+  const hasLimit = Number.isFinite(maxEntries) && maxEntries > 0;
 
   function clearCoalesceTimer(): void {
     if (coalesceTimer !== undefined) {
@@ -71,8 +74,8 @@ export function signalHistory<T>(
   function push(value: T): void {
     past.update((entries) => {
       const next = [...entries, value];
-      return hasLimit && next.length > limit
-        ? next.slice(next.length - limit)
+      return hasLimit && next.length > maxEntries
+        ? next.slice(next.length - maxEntries)
         : next;
     });
     future.set([]);
@@ -96,14 +99,19 @@ export function signalHistory<T>(
     push(previous);
   }
 
+  // The writes below happen inside `untracked()`, which clears the active
+  // reactive consumer. That both (a) avoids tracking the history signals as
+  // dependencies and (b) permits writing signals from within the effect on
+  // Angular 18 (where the effect write-guard is otherwise on by default).
   const watcher = effect(() => {
     const value = source();
     untracked(() => {
       if (destroyed || equal(value, last)) {
         return;
       }
-      if (transactionDepth > 0) {
-        // Committed as one entry when the transaction ends.
+      // While paused or inside a transaction, track the value but don't record;
+      // the transaction commits a single entry when it ends.
+      if (paused || transactionDepth > 0) {
         last = value;
         return;
       }
@@ -179,6 +187,34 @@ export function signalHistory<T>(
     }
   }
 
+  /** Suspend recording. Changes still update the value but add no entries. */
+  function pause(): void {
+    paused = true;
+    // Any in-flight coalesced burst ends here so it can't absorb later changes.
+    clearCoalesceTimer();
+    coalescing = false;
+    last = untracked(source);
+  }
+
+  /** Resume recording after {@link pause}, treating the current value as the baseline. */
+  function resume(): void {
+    paused = false;
+    last = untracked(source);
+  }
+
+  /** Run `work` with recording suspended (e.g. a programmatic/server refresh). */
+  function withoutRecording(work: () => void): void {
+    const wasPaused = paused;
+    pause();
+    try {
+      work();
+    } finally {
+      if (!wasPaused) {
+        resume();
+      }
+    }
+  }
+
   function destroy(): void {
     if (destroyed) {
       return;
@@ -197,6 +233,9 @@ export function signalHistory<T>(
     canRedo: computed(() => future().length > 0),
     reset,
     transaction,
+    pause,
+    resume,
+    withoutRecording,
     past: past.asReadonly(),
     future: future.asReadonly(),
     destroy,

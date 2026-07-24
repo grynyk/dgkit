@@ -47,6 +47,19 @@ export interface DgSignalHistory<T> {
    * into one history entry.
    */
   transaction(work: () => void): void;
+  /**
+   * Suspend recording. Changes still update the underlying signal but add no
+   * history entries — useful for programmatic or server-driven updates you do
+   * not want in the undo stack. Pair with {@link resume}.
+   */
+  pause(): void;
+  /** Resume recording after {@link pause}, using the current value as baseline. */
+  resume(): void;
+  /**
+   * Run `work` with recording suspended, restoring the previous paused state
+   * afterwards. The ergonomic form of {@link pause} + {@link resume}.
+   */
+  withoutRecording(work: () => void): void;
   /** Snapshot of past values, oldest first (excludes the current value). */
   readonly past: Signal<readonly T[]>;
   /** Snapshot of future values, next-to-redo first. */

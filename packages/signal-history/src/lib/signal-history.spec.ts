@@ -266,6 +266,62 @@ describe('signalHistory — reset', () => {
   });
 });
 
+describe('signalHistory — pause / resume', () => {
+  it('does not record while paused, but still updates the value', () => {
+    const { source, history } = make(0);
+    history.pause();
+    change(source, 1);
+    change(source, 2);
+    expect(source()).toBe(2);
+    expect(history.canUndo()).toBe(false);
+    expect(history.past()).toEqual([]);
+  });
+
+  it('records again after resume, from the current baseline', () => {
+    const { source, history } = make(0);
+    history.pause();
+    change(source, 5);
+    history.resume();
+    change(source, 6);
+    expect(history.past()).toEqual([5]);
+    history.undo();
+    expect(source()).toBe(5);
+  });
+
+  it('withoutRecording suppresses recording for its work only', () => {
+    const { source, history } = make(0);
+    change(source, 1);
+    history.withoutRecording(() => {
+      source.set(99);
+    });
+    flush();
+    expect(source()).toBe(99);
+    // the 99 was not recorded…
+    expect(history.past()).toEqual([0]);
+    // …and recording resumed afterwards.
+    change(source, 100);
+    expect(history.past()).toEqual([0, 99]);
+  });
+
+  it('withoutRecording preserves an already-paused state', () => {
+    const { source, history } = make(0);
+    history.pause();
+    history.withoutRecording(() => source.set(1));
+    flush();
+    change(source, 2);
+    // still paused after the nested block
+    expect(history.past()).toEqual([]);
+  });
+});
+
+describe('signalHistory — limit flooring', () => {
+  it('floors a fractional limit', () => {
+    const { source, history } = make(0, { limit: 2.9 });
+    for (let i = 1; i <= 5; i++) change(source, i);
+    expect(history.past()).toHaveLength(2);
+  });
+});
+
 describe('signalHistory — teardown', () => {
   it('stops recording after destroy()', () => {
     const { source, history } = make(0);
