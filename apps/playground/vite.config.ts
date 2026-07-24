@@ -4,6 +4,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
+  // Relative base so the build works under any GitHub Pages subpath
+  // (e.g. https://<user>.github.io/<repo>/). Hash routing keeps deep links
+  // working without a server-side SPA fallback.
+  base: './',
   plugins: [angular()],
   resolve: {
     alias: {
