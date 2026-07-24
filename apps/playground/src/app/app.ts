@@ -1,146 +1,47 @@
-import { DecimalPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  signal,
-  type WritableSignal,
-} from '@angular/core';
-import {
-  type DgResizeEvent,
-  ResizeObserverDirective,
-} from '@dgkit/resize-observer';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
-import { KitDemo } from './kit-demo';
-
-interface DemoState {
-  readonly width: number;
-  readonly height: number;
-  readonly count: number;
-  readonly initial: boolean;
-}
-
-const EMPTY: DemoState = { width: 0, height: 0, count: 0, initial: false };
-
+/**
+ * Thin shell: a header and the router outlet. All demos live in their own
+ * standalone components under `./demos`, composed by `PlaygroundPage`.
+ */
 @Component({
   selector: 'dg-root',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ResizeObserverDirective, DecimalPipe, KitDemo],
+  imports: [RouterOutlet],
   template: `
-    <header>
-      <h1>@dgkit/resize-observer</h1>
+    <header class="shell-header">
+      <h1>dgkit playground</h1>
       <p>
-        Drag the bottom-right handle of any panel to resize it and watch the
-        directive report dimensions. Each panel demonstrates a different input.
+        Live previews of every <code>&#64;dgkit</code> package. Each card is a
+        standalone component consuming the library from source.
       </p>
     </header>
-
-    <main>
-      <!-- Basic observation -->
-      <section class="demo" dgResizeObserver (dgResize)="update(basic, $event)">
-        <h2>Basic</h2>
-        @let b = basic();
-        <code
-          >{{ b.width | number: '1.0-0' }} ×
-          {{ b.height | number: '1.0-0' }}</code
-        >
-        <small>{{ b.count }} event(s)</small>
-      </section>
-
-      <!-- Debounced observation -->
-      <section
-        class="demo"
-        dgResizeObserver
-        [resizeDebounce]="200"
-        (dgResize)="update(debounced, $event)"
-      >
-        <h2>Debounced (200ms)</h2>
-        @let d = debounced();
-        <code
-          >{{ d.width | number: '1.0-0' }} ×
-          {{ d.height | number: '1.0-0' }}</code
-        >
-        <small>{{ d.count }} event(s)</small>
-      </section>
-
-      <!-- Border-box observation -->
-      <section
-        class="demo padded"
-        dgResizeObserver
-        [resizeBox]="'border-box'"
-        (dgResize)="update(borderBox, $event)"
-      >
-        <h2>Border-box</h2>
-        @let bb = borderBox();
-        <code
-          >{{ bb.width | number: '1.0-0' }} ×
-          {{ bb.height | number: '1.0-0' }}</code
-        >
-        <small>includes padding + border</small>
-      </section>
-
-      <!-- Initial emission -->
-      <section
-        class="demo"
-        dgResizeObserver
-        [resizeEmitInitial]="true"
-        (dgResize)="update(initial, $event)"
-      >
-        <h2>Initial emission</h2>
-        @let i = initial();
-        <code
-          >{{ i.width | number: '1.0-0' }} ×
-          {{ i.height | number: '1.0-0' }}</code
-        >
-        <small>first event initial: {{ i.initial }}</small>
-      </section>
-
-      <!-- Distinct emission -->
-      <section
-        class="demo"
-        dgResizeObserver
-        [resizeDistinct]="true"
-        (dgResize)="update(distinct, $event)"
-      >
-        <h2>Distinct</h2>
-        @let ds = distinct();
-        <code
-          >{{ ds.width | number: '1.0-0' }} ×
-          {{ ds.height | number: '1.0-0' }}</code
-        >
-        <small>{{ ds.count }} distinct event(s)</small>
-      </section>
+    <main class="shell-main">
+      <router-outlet />
     </main>
-
-    <h2>Signal APIs</h2>
-    <dg-kit-demo />
-
-    <footer>
-      <p>
-        SSR-safe: this component imports the directive directly and would render
-        without error on the server — the observer is only created in the
-        browser.
-      </p>
-    </footer>
   `,
-  styleUrl: './app.css',
+  styles: `
+    .shell-header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem 0.5rem;
+    }
+    .shell-header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+    .shell-header p {
+      color: #5a6672;
+      line-height: 1.5;
+      max-width: 44rem;
+    }
+    .shell-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1rem 4rem;
+    }
+  `,
 })
-export class App {
-  protected readonly basic = signal<DemoState>(EMPTY);
-  protected readonly debounced = signal<DemoState>(EMPTY);
-  protected readonly borderBox = signal<DemoState>(EMPTY);
-  protected readonly initial = signal<DemoState>(EMPTY);
-  protected readonly distinct = signal<DemoState>(EMPTY);
-
-  protected update(
-    target: WritableSignal<DemoState>,
-    event: DgResizeEvent,
-  ): void {
-    target.update((state) => ({
-      width: event.width,
-      height: event.height,
-      count: state.count + 1,
-      initial: event.initial,
-    }));
-  }
-}
+export class App {}

@@ -24,6 +24,9 @@ export default defineConfig({
       '@dgkit/signal-history': fileURLToPath(
         new URL('../../packages/signal-history/src/index.ts', import.meta.url),
       ),
+      '@dgkit/route-state': fileURLToPath(
+        new URL('../../packages/route-state/src/index.ts', import.meta.url),
+      ),
       '@dgkit/format': fileURLToPath(
         new URL('../../packages/format/src/index.ts', import.meta.url),
       ),

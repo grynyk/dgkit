@@ -14,6 +14,79 @@
 
 body {
   margin: 0;
-  background: #fff;
+  background: #f3f5f8;
   color: #1a1a1a;
+}
+
+/* --- Shared demo utility classes ------------------------------------------ */
+
+.metric {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1a237e;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+.muted {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.dg-input,
+.dg-btn {
+  font: inherit;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #c2cbd6;
+}
+
+.dg-input {
+  flex: 1;
+  min-width: 6rem;
+  background: #fff;
+}
+
+.dg-btn {
+  cursor: pointer;
+  background: #1a237e;
+  color: #fff;
+  border-color: #1a237e;
+}
+
+.dg-btn.secondary {
+  background: #fff;
+  color: #1a237e;
+}
+
+.dg-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e8eaf6;
+  color: #283593;
+}
+
+.pill.ok {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.pill.warn {
+  background: #fdecea;
+  color: #c0392b;
 }

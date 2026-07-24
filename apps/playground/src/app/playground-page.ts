@@ -1,0 +1,45 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ClipboardDemo } from './demos/clipboard-demo';
+import { FormatDemo } from './demos/format-demo';
+import { IntersectionObserverDemo } from './demos/intersection-observer-demo';
+import { ResizeObserverDemo } from './demos/resize-observer-demo';
+import { RouteStateDemo } from './demos/route-state-demo';
+import { SignalHistoryDemo } from './demos/signal-history-demo';
+
+/**
+ * The demos page. Each package lives in its own standalone component; this
+ * page only lays them out in a responsive grid.
+ */
+@Component({
+  selector: 'dg-playground-page',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ResizeObserverDemo,
+    IntersectionObserverDemo,
+    RouteStateDemo,
+    SignalHistoryDemo,
+    ClipboardDemo,
+    FormatDemo,
+  ],
+  template: `
+    <div class="grid">
+      <dg-resize-observer-demo />
+      <dg-intersection-observer-demo />
+      <dg-route-state-demo />
+      <dg-signal-history-demo />
+      <dg-clipboard-demo />
+      <dg-format-demo />
+    </div>
+  `,
+  styles: `
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+  `,
+})
+export class PlaygroundPage {}
