@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/packages/blob-download",
+    "outDir": "../../dist/out-tsc/packages/blob-saver",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,

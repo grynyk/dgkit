@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/signal-storage",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Type-safe, bidirectional synchronization between Angular signals and localStorage/sessionStorage, with cross-tab sync.",
   "author": {
     "name": "Danylo Grynyk",

@@ -8,7 +8,7 @@ import {
   type Mock,
 } from 'vitest';
 
-import { downloadBlob, isDownloadSupported } from './blob-download';
+import { downloadBlob, isDownloadSupported } from './blob-saver';
 
 const wait = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));

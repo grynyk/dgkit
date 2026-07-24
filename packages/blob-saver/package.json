@@ -1,26 +1,26 @@
 {
-  "name": "@dgkit/blob-download",
-  "version": "0.0.0",
+  "name": "@dgkit/blob-saver",
+  "version": "0.1.0",
   "description": "Framework-free helper for triggering a browser file download from a Blob, with no memory leaks.",
   "author": {
     "name": "Danylo Grynyk",
     "email": "danielgrynyk@gmail.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/blob-download#readme",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/blob-saver#readme",
   "bugs": {
     "url": "https://github.com/grynyk/dgkit/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/grynyk/dgkit.git",
-    "directory": "packages/blob-download"
+    "directory": "packages/blob-saver"
   },
   "keywords": [
     "angular",
     "standalone",
     "ssr",
-    "blob-download",
+    "blob-saver",
     "dgkit"
   ],
   "sideEffects": false,
