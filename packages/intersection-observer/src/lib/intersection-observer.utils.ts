@@ -1,4 +1,35 @@
-import type { DgIntersectEvent } from './intersection-observer.types';
+import { ElementRef } from '@angular/core';
+
+import type {
+  DgIntersectEvent,
+  DgIntersectionTarget,
+} from './intersection-observer.types';
+
+/** Resolve a raw `Element`, an `ElementRef`, or `null`/`undefined` to an element. */
+export function resolveElement(
+  value: Element | ElementRef<Element> | undefined | null,
+): Element | undefined {
+  if (!value) {
+    return undefined;
+  }
+  return value instanceof ElementRef ? value.nativeElement : value;
+}
+
+/**
+ * Normalize a {@link DgIntersectionTarget} into an accessor returning the
+ * element (or `undefined`). A plain target is resolved once; a function target
+ * (e.g. a `viewChild` signal) is resolved on every read, so it re-observes
+ * reactively.
+ */
+export function toTargetAccessor(
+  target: DgIntersectionTarget,
+): () => Element | undefined {
+  if (typeof target === 'function') {
+    return () => resolveElement(target());
+  }
+  const resolved = resolveElement(target);
+  return () => resolved;
+}
 
 /**
  * Feature-detect the native `IntersectionObserver`. Returns `false` under SSR

@@ -1,4 +1,10 @@
-import type { DgResizeBox, DgResizeEvent } from './resize-observer.types';
+import { ElementRef } from '@angular/core';
+
+import type {
+  DgResizeBox,
+  DgResizeEvent,
+  DgResizeTarget,
+} from './resize-observer.types';
 
 /** All valid observation boxes, used for runtime input validation. */
 export const DG_RESIZE_BOXES: readonly DgResizeBox[] = [
@@ -104,6 +110,31 @@ function selectBoxSizeArray(
     default:
       return entry.contentBoxSize;
   }
+}
+
+/** Resolve a raw `Element`, an `ElementRef`, or `null`/`undefined` to an element. */
+export function resolveElement(
+  value: Element | ElementRef<Element> | undefined | null,
+): Element | undefined {
+  if (!value) {
+    return undefined;
+  }
+  return value instanceof ElementRef ? value.nativeElement : value;
+}
+
+/**
+ * Normalize a {@link DgResizeTarget} into an accessor returning the element (or
+ * `undefined`). A plain target is resolved once; a function target (e.g. a
+ * `viewChild` signal) is resolved on every read, so it re-observes reactively.
+ */
+export function toTargetAccessor(
+  target: DgResizeTarget,
+): () => Element | undefined {
+  if (typeof target === 'function') {
+    return () => resolveElement(target());
+  }
+  const resolved = resolveElement(target);
+  return () => resolved;
 }
 
 /**

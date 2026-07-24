@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { ElementRef } from '@angular/core';
+
 import {
   DG_DEFAULT_RESIZE_BOX,
   dimensionsEqual,
@@ -8,8 +10,10 @@ import {
   normalizeDebounce,
   pickEntry,
   readBoxSize,
+  resolveElement,
   toAccessor,
   toResizeEvent,
+  toTargetAccessor,
 } from './resize-observer.utils';
 import {
   installMockResizeObserver,
@@ -146,6 +150,33 @@ describe('readBoxSize', () => {
       width: 3,
       height: 4,
     });
+  });
+});
+
+describe('resolveElement / toTargetAccessor', () => {
+  it('resolveElement handles Element, ElementRef and nullish', () => {
+    const el = document.createElement('div');
+    expect(resolveElement(el)).toBe(el);
+    expect(resolveElement(new ElementRef(el))).toBe(el);
+    expect(resolveElement(null)).toBeUndefined();
+    expect(resolveElement(undefined)).toBeUndefined();
+  });
+
+  it('toTargetAccessor resolves a plain target once', () => {
+    const el = document.createElement('div');
+    const accessor = toTargetAccessor(new ElementRef(el));
+    expect(accessor()).toBe(el);
+    expect(accessor()).toBe(el);
+  });
+
+  it('toTargetAccessor re-resolves a function target on every read', () => {
+    let current: HTMLElement | undefined = document.createElement('div');
+    const accessor = toTargetAccessor(() => current);
+    expect(accessor()).toBe(current);
+    current = document.createElement('span');
+    expect(accessor()).toBe(current);
+    current = undefined;
+    expect(accessor()).toBeUndefined();
   });
 });
 

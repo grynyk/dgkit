@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
+import { ElementRef } from '@angular/core';
+
 import {
   isIntersectionObserverSupported,
   normalizeRootMargin,
   normalizeThreshold,
   pickEntry,
+  resolveElement,
   toAccessor,
   toIntersectEvent,
+  toTargetAccessor,
 } from './intersection-observer.utils';
 import {
   installMockIntersectionObserver,
@@ -80,6 +84,27 @@ describe('pickEntry', () => {
     expect(pickEntry([ea, eb], a)).toBe(ea);
     expect(pickEntry([ea, eb], document.createElement('p'))).toBe(eb);
     expect(pickEntry([], a)).toBeUndefined();
+  });
+});
+
+describe('resolveElement / toTargetAccessor', () => {
+  it('resolveElement handles Element, ElementRef and nullish', () => {
+    const el = document.createElement('div');
+    expect(resolveElement(el)).toBe(el);
+    expect(resolveElement(new ElementRef(el))).toBe(el);
+    expect(resolveElement(null)).toBeUndefined();
+    expect(resolveElement(undefined)).toBeUndefined();
+  });
+
+  it('toTargetAccessor resolves plain vs function targets', () => {
+    const a = document.createElement('div');
+    expect(toTargetAccessor(a)()).toBe(a);
+
+    let current: HTMLElement | undefined = a;
+    const accessor = toTargetAccessor(() => current);
+    expect(accessor()).toBe(a);
+    current = undefined;
+    expect(accessor()).toBeUndefined();
   });
 });
 

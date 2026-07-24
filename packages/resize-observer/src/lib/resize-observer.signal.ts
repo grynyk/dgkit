@@ -1,4 +1,4 @@
-import { computed, ElementRef, signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
 
 import { createResizeObservation } from './resize-observer.core';
 import type {
@@ -11,24 +11,8 @@ import {
   normalizeBox,
   normalizeDebounce,
   toAccessor,
+  toTargetAccessor,
 } from './resize-observer.utils';
-
-function resolveElement(
-  value: Element | ElementRef<Element> | undefined | null,
-): Element | undefined {
-  if (!value) {
-    return undefined;
-  }
-  return value instanceof ElementRef ? value.nativeElement : value;
-}
-
-function toTargetAccessor(target: DgResizeTarget): () => Element | undefined {
-  if (typeof target === 'function') {
-    return () => resolveElement(target());
-  }
-  const resolved = resolveElement(target);
-  return () => resolved;
-}
 
 /**
  * Observe an element's size and expose it as signals.
