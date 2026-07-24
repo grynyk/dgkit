@@ -32,6 +32,8 @@ yarn add @dgkit/resize-observer
 
 ## Compatibility
 
+Works with **Angular 18, 19, 20 and 21**.
+
 | Dependency | Supported range      |
 | ---------- | -------------------- |
 | Angular    | `>=18.0.0 <22.0.0`   |
@@ -267,4 +269,4 @@ Contributions are welcome — see the repository
 
 ## License
 
-[MIT](../../LICENSE) © Danylo Grynyk
+[MIT](../../LICENSE)

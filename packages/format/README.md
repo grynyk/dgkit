@@ -15,6 +15,10 @@ re-implement (subtly wrong) in every project.
 pnpm add @dgkit/format
 ```
 
+## Compatibility
+
+> **Framework-agnostic.** `@dgkit/format` has **no Angular — or any framework — dependency**. It is pure TypeScript with zero runtime dependencies, so it works with **any Angular version** (or React, Vue, Svelte, plain Node, a Web Worker… anywhere JavaScript runs).
+
 ## `middleTruncate`
 
 Truncate the middle of a string, keeping the start and end — ideal for hashes,
@@ -76,4 +80,4 @@ single character and is never cut in half into lone surrogates. Where
 
 ## License
 
-[MIT](../../LICENSE) © Danylo Grynyk
+[MIT](../../LICENSE)

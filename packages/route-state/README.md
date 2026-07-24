@@ -50,6 +50,19 @@ pnpm add @dgkit/route-state
 
 Requires `@angular/router` as a peer dependency.
 
+## Compatibility
+
+Works with **Angular 18, 19, 20 and 21**.
+
+| Peer dependency   | Supported range      |
+| ----------------- | -------------------- |
+| `@angular/core`   | `>=18.0.0 <22.0.0`   |
+| `@angular/common` | `>=18.0.0 <22.0.0`   |
+| `@angular/router` | `>=18.0.0 <22.0.0`   |
+| `rxjs`            | `^6.5.3` or `^7.4.0` |
+
+Angular and RxJS are **peer dependencies** — never bundled into the package.
+
 ## Parameters
 
 | Factory                              | Value type            | Notes                                         |
@@ -123,4 +136,4 @@ the incoming request.
 
 ## License
 
-[MIT](../../LICENSE) © Danylo Grynyk
+[MIT](../../LICENSE)
