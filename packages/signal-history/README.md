@@ -17,7 +17,7 @@ filters and complex forms.
 ## Installation
 
 ```bash
-pnpm add @dgkit/signal-history
+yarn add @dgkit/signal-history
 ```
 
 ## Compatibility

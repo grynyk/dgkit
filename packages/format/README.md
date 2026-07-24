@@ -12,7 +12,7 @@ re-implement (subtly wrong) in every project.
 ## Installation
 
 ```bash
-pnpm add @dgkit/format
+yarn add @dgkit/format
 ```
 
 ## Compatibility

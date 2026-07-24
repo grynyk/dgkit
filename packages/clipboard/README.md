@@ -12,7 +12,7 @@ The command stays a plain async method; only the state you render is reactive.
 ## Installation
 
 ```bash
-pnpm add @dgkit/clipboard
+yarn add @dgkit/clipboard
 ```
 
 ## Compatibility

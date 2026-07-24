@@ -19,14 +19,6 @@ tree-shakeable, with zero runtime dependencies beyond `tslib`.
 ## Installation
 
 ```bash
-npm install @dgkit/resize-observer
-```
-
-```bash
-pnpm add @dgkit/resize-observer
-```
-
-```bash
 yarn add @dgkit/resize-observer
 ```
 
@@ -249,15 +241,15 @@ than throwing.
 This package lives in the [`dgkit`](../../README.md) Nx monorepo.
 
 ```bash
-pnpm nx build resize-observer        # ng-packagr production build
-pnpm nx test resize-observer         # Vitest + coverage
-pnpm nx lint resize-observer         # ESLint
-pnpm nx typecheck resize-observer    # tsc --noEmit
+yarn nx build resize-observer        # ng-packagr production build
+yarn nx test resize-observer         # Vitest + coverage
+yarn nx lint resize-observer         # ESLint
+yarn nx typecheck resize-observer    # tsc --noEmit
 ```
 
 ## Testing
 
-Run with `pnpm nx test resize-observer`. The suite covers the directive, the
+Run with `yarn nx test resize-observer`. The suite covers the directive, the
 signal API and the utilities separately, backed by a `ResizeObserver` mock that
 can simulate multiple entries, unsupported box options and an environment where
 the API is missing entirely. Coverage thresholds are enforced.

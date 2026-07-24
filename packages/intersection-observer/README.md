@@ -17,7 +17,7 @@ scrolling.
 ## Installation
 
 ```bash
-pnpm add @dgkit/intersection-observer
+yarn add @dgkit/intersection-observer
 ```
 
 ## Compatibility

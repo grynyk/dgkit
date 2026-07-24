@@ -50,15 +50,21 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Create release PR or publish to npm
+      # When changesets are present, open/update the "Version Packages" PR.
+      # This only bumps versions on a PR branch; it never publishes.
+      - name: Create or update the version PR
         uses: changesets/action@v1
         with:
           version: yarn version-packages
-          publish: yarn release
           commit: 'chore: version packages'
           title: 'chore: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Explicitly build and publish. publish-dist.mjs is idempotent: versions
+      # already on the registry are skipped, so this is a no-op unless the
+      # version PR was just merged (i.e. main carries an unpublished bump).
+      - name: Build and publish to npm
+        run: yarn build && node tools/publish-dist.mjs
+        env:
           # Publish scoped packages publicly, with provenance (see id-token above).
           NPM_CONFIG_PROVENANCE: 'true'

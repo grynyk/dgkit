@@ -45,7 +45,7 @@ route.reset(); // back to defaults
 ## Installation
 
 ```bash
-pnpm add @dgkit/route-state
+yarn add @dgkit/route-state
 ```
 
 Requires `@angular/router` as a peer dependency.
