@@ -1,5 +1,14 @@
 # @dgkit/intersection-observer
 
+## 0.1.1
+
+### Patch Changes
+
+- 5a0a200: Internal cleanup: move the shared target-resolution helpers
+  (`resolveElement`/`toTargetAccessor`) into each package's `utils` module so the
+  signal API and directive consume one implementation. No public API or behaviour
+  change.
+
 ## 0.1.0
 
 ### Minor Changes

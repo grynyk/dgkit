@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/format",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Framework-free string and number formatting helpers, including grapheme-safe truncation.",
   "author": {
     "name": "Danylo Grynyk",
