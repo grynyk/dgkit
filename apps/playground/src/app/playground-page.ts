@@ -1,11 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ClipboardDemo } from './demos/clipboard-demo';
+import { FileDownloadDemo } from './demos/file-download-demo';
 import { FormatDemo } from './demos/format-demo';
 import { IntersectionObserverDemo } from './demos/intersection-observer-demo';
+import { MutationObserverDemo } from './demos/mutation-observer-demo';
 import { ResizeObserverDemo } from './demos/resize-observer-demo';
 import { RouteStateDemo } from './demos/route-state-demo';
 import { SignalHistoryDemo } from './demos/signal-history-demo';
+import { SignalStorageDemo } from './demos/signal-storage-demo';
 
 /**
  * The demos page. Each package lives in its own standalone component; this
@@ -18,19 +21,25 @@ import { SignalHistoryDemo } from './demos/signal-history-demo';
   imports: [
     ResizeObserverDemo,
     IntersectionObserverDemo,
+    MutationObserverDemo,
     RouteStateDemo,
+    SignalStorageDemo,
     SignalHistoryDemo,
     ClipboardDemo,
     FormatDemo,
+    FileDownloadDemo,
   ],
   template: `
     <div class="grid">
       <dg-resize-observer-demo />
       <dg-intersection-observer-demo />
+      <dg-mutation-observer-demo />
       <dg-route-state-demo />
+      <dg-signal-storage-demo />
       <dg-signal-history-demo />
       <dg-clipboard-demo />
       <dg-format-demo />
+      <dg-file-download-demo />
     </div>
   `,
   styles: `

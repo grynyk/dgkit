@@ -21,14 +21,17 @@ and validated in CI with Vitest and enforced coverage thresholds.
 
 ## Packages
 
-| Package                                                            | npm                                                                                                                            | Description                                                           |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| [`@dgkit/route-state`](./packages/route-state)                     | [![npm](https://img.shields.io/npm/v/@dgkit/route-state)](https://www.npmjs.com/package/@dgkit/route-state)                   | Type-safe, bidirectional sync between signals and route/query params. |
-| [`@dgkit/resize-observer`](./packages/resize-observer)             | [![npm](https://img.shields.io/npm/v/@dgkit/resize-observer)](https://www.npmjs.com/package/@dgkit/resize-observer)           | SSR-safe `ResizeObserver` — signal API + directive.                   |
-| [`@dgkit/intersection-observer`](./packages/intersection-observer) | [![npm](https://img.shields.io/npm/v/@dgkit/intersection-observer)](https://www.npmjs.com/package/@dgkit/intersection-observer) | SSR-safe `IntersectionObserver` — signal API + directive.             |
-| [`@dgkit/signal-history`](./packages/signal-history)               | [![npm](https://img.shields.io/npm/v/@dgkit/signal-history)](https://www.npmjs.com/package/@dgkit/signal-history)             | Undo/redo for signals, with grouped transactions.                     |
-| [`@dgkit/clipboard`](./packages/clipboard)                         | [![npm](https://img.shields.io/npm/v/@dgkit/clipboard)](https://www.npmjs.com/package/@dgkit/clipboard)                       | Clipboard helper with signal-based operation state.                   |
-| [`@dgkit/format`](./packages/format)                               | [![npm](https://img.shields.io/npm/v/@dgkit/format)](https://www.npmjs.com/package/@dgkit/format)                             | Framework-free, grapheme-safe string/number formatting.               |
+| Package                                                            | npm                                                                                                                             | Description                                                                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [`@dgkit/route-state`](./packages/route-state)                     | [![npm](https://img.shields.io/npm/v/@dgkit/route-state)](https://www.npmjs.com/package/@dgkit/route-state)                     | Type-safe, bidirectional sync between signals and route/query params.                                  |
+| [`@dgkit/signal-storage`](./packages/signal-storage)               | [![npm](https://img.shields.io/npm/v/@dgkit/signal-storage)](https://www.npmjs.com/package/@dgkit/signal-storage)               | Type-safe, bidirectional sync between signals and localStorage/sessionStorage, with cross-tab updates. |
+| [`@dgkit/resize-observer`](./packages/resize-observer)             | [![npm](https://img.shields.io/npm/v/@dgkit/resize-observer)](https://www.npmjs.com/package/@dgkit/resize-observer)             | SSR-safe `ResizeObserver` — signal API + directive.                                                    |
+| [`@dgkit/intersection-observer`](./packages/intersection-observer) | [![npm](https://img.shields.io/npm/v/@dgkit/intersection-observer)](https://www.npmjs.com/package/@dgkit/intersection-observer) | SSR-safe `IntersectionObserver` — signal API + directive.                                              |
+| [`@dgkit/mutation-observer`](./packages/mutation-observer)         | [![npm](https://img.shields.io/npm/v/@dgkit/mutation-observer)](https://www.npmjs.com/package/@dgkit/mutation-observer)         | SSR-safe `MutationObserver` — signal API + directive.                                                  |
+| [`@dgkit/signal-history`](./packages/signal-history)               | [![npm](https://img.shields.io/npm/v/@dgkit/signal-history)](https://www.npmjs.com/package/@dgkit/signal-history)               | Undo/redo for signals, with grouped transactions.                                                      |
+| [`@dgkit/clipboard`](./packages/clipboard)                         | [![npm](https://img.shields.io/npm/v/@dgkit/clipboard)](https://www.npmjs.com/package/@dgkit/clipboard)                         | Clipboard helper with signal-based operation state.                                                    |
+| [`@dgkit/format`](./packages/format)                               | [![npm](https://img.shields.io/npm/v/@dgkit/format)](https://www.npmjs.com/package/@dgkit/format)                               | Framework-free, grapheme-safe string/number formatting.                                                |
+| [`@dgkit/file-download`](./packages/file-download)                 | [![npm](https://img.shields.io/npm/v/@dgkit/file-download)](https://www.npmjs.com/package/@dgkit/file-download)                 | Framework-free helper for triggering a Blob download, with no memory leaks.                            |
 
 Every package is standalone, tree-shakeable, SSR-safe and **zoneless-friendly** —
 native callbacks write signals directly, with no `NgZone` and no assumption that
@@ -93,11 +96,14 @@ README and CHANGELOG, wired into the workspace. See
 dgkit/
 ├── packages/            # publishable @dgkit/* libraries
 │   ├── route-state/
+│   ├── signal-storage/
 │   ├── resize-observer/
 │   ├── intersection-observer/
+│   ├── mutation-observer/
 │   ├── signal-history/
 │   ├── clipboard/
-│   └── format/
+│   ├── format/
+│   └── file-download/
 ├── apps/
 │   └── playground/      # manual verification app (not published)
 ├── tools/               # workspace tooling (package scaffolder)

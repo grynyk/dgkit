@@ -22,6 +22,12 @@ export default defineConfig({
           import.meta.url,
         ),
       ),
+      '@dgkit/mutation-observer': fileURLToPath(
+        new URL(
+          '../../packages/mutation-observer/src/index.ts',
+          import.meta.url,
+        ),
+      ),
       '@dgkit/clipboard': fileURLToPath(
         new URL('../../packages/clipboard/src/index.ts', import.meta.url),
       ),
@@ -31,8 +37,14 @@ export default defineConfig({
       '@dgkit/route-state': fileURLToPath(
         new URL('../../packages/route-state/src/index.ts', import.meta.url),
       ),
+      '@dgkit/signal-storage': fileURLToPath(
+        new URL('../../packages/signal-storage/src/index.ts', import.meta.url),
+      ),
       '@dgkit/format': fileURLToPath(
         new URL('../../packages/format/src/index.ts', import.meta.url),
+      ),
+      '@dgkit/file-download': fileURLToPath(
+        new URL('../../packages/file-download/src/index.ts', import.meta.url),
       ),
     },
   },

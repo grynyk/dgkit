@@ -1,0 +1,39 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "signal-storage",
+  "projectType": "library",
+  "sourceRoot": "packages/signal-storage/src",
+  "tags": ["scope:public", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/signal-storage"],
+      "options": {
+        "command": "ng-packagr -p packages/signal-storage/ng-package.json -c packages/signal-storage/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/packages/signal-storage"],
+      "options": {
+        "command": "vitest run --config packages/signal-storage/vitest.config.ts --coverage"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint packages/signal-storage/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "tsc -p packages/signal-storage/tsconfig.lib.json --noEmit",
+          "tsc -p packages/signal-storage/tsconfig.spec.json --noEmit"
+        ]
+      }
+    }
+  }
+}

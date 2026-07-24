@@ -1,0 +1,33 @@
+{
+  "name": "@dgkit/file-download",
+  "version": "0.0.0",
+  "description": "Framework-free helper for triggering a browser file download from a Blob, with no memory leaks.",
+  "author": {
+    "name": "Danylo Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/file-download#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/file-download"
+  },
+  "keywords": [
+    "angular",
+    "standalone",
+    "ssr",
+    "file-download",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
