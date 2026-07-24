@@ -21,14 +21,14 @@ and validated in CI with Vitest and enforced coverage thresholds.
 
 ## Packages
 
-| Package                                                            | Description                                                           |
-| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| [`@dgkit/route-state`](./packages/route-state)                     | Type-safe, bidirectional sync between signals and route/query params. |
-| [`@dgkit/resize-observer`](./packages/resize-observer)             | SSR-safe `ResizeObserver` — signal API + directive.                   |
-| [`@dgkit/intersection-observer`](./packages/intersection-observer) | SSR-safe `IntersectionObserver` — signal API + directive.             |
-| [`@dgkit/signal-history`](./packages/signal-history)               | Undo/redo for signals, with grouped transactions.                     |
-| [`@dgkit/clipboard`](./packages/clipboard)                         | Clipboard helper with signal-based operation state.                   |
-| [`@dgkit/format`](./packages/format)                               | Framework-free, grapheme-safe string/number formatting.               |
+| Package                                                            | npm                                                                                                                            | Description                                                           |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`@dgkit/route-state`](./packages/route-state)                     | [![npm](https://img.shields.io/npm/v/@dgkit/route-state)](https://www.npmjs.com/package/@dgkit/route-state)                   | Type-safe, bidirectional sync between signals and route/query params. |
+| [`@dgkit/resize-observer`](./packages/resize-observer)             | [![npm](https://img.shields.io/npm/v/@dgkit/resize-observer)](https://www.npmjs.com/package/@dgkit/resize-observer)           | SSR-safe `ResizeObserver` — signal API + directive.                   |
+| [`@dgkit/intersection-observer`](./packages/intersection-observer) | [![npm](https://img.shields.io/npm/v/@dgkit/intersection-observer)](https://www.npmjs.com/package/@dgkit/intersection-observer) | SSR-safe `IntersectionObserver` — signal API + directive.             |
+| [`@dgkit/signal-history`](./packages/signal-history)               | [![npm](https://img.shields.io/npm/v/@dgkit/signal-history)](https://www.npmjs.com/package/@dgkit/signal-history)             | Undo/redo for signals, with grouped transactions.                     |
+| [`@dgkit/clipboard`](./packages/clipboard)                         | [![npm](https://img.shields.io/npm/v/@dgkit/clipboard)](https://www.npmjs.com/package/@dgkit/clipboard)                       | Clipboard helper with signal-based operation state.                   |
+| [`@dgkit/format`](./packages/format)                               | [![npm](https://img.shields.io/npm/v/@dgkit/format)](https://www.npmjs.com/package/@dgkit/format)                             | Framework-free, grapheme-safe string/number formatting.               |
 
 Every package is standalone, tree-shakeable, SSR-safe and **zoneless-friendly** —
 native callbacks write signals directly, with no `NgZone` and no assumption that

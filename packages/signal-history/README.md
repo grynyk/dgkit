@@ -1,5 +1,7 @@
 # @dgkit/signal-history
 
+[![npm](https://img.shields.io/npm/v/@dgkit/signal-history)](https://www.npmjs.com/package/@dgkit/signal-history)
+
 **Undo/redo for Angular signals.** Attach history to any `WritableSignal` and
 get `undo()`, `redo()`, `canUndo()`, `canRedo()` — all signals, so they drop
 straight into templates and `computed()`s.

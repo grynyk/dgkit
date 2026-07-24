@@ -1,5 +1,7 @@
 # @dgkit/route-state
 
+[![npm](https://img.shields.io/npm/v/@dgkit/route-state)](https://www.npmjs.com/package/@dgkit/route-state)
+
 **Type-safe, bidirectional synchronization between Angular signals and the URL.**
 
 Imagine never writing this again:

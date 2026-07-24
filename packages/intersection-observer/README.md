@@ -1,5 +1,7 @@
 # @dgkit/intersection-observer
 
+[![npm](https://img.shields.io/npm/v/@dgkit/intersection-observer)](https://www.npmjs.com/package/@dgkit/intersection-observer)
+
 A lightweight, **standalone** and **SSR-safe** Angular wrapper around the native
 [`IntersectionObserver`](https://developer.mozilla.org/docs/Web/API/IntersectionObserver)
 API. Ships **two APIs over one engine** — a signal function and a directive.

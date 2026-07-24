@@ -1,5 +1,7 @@
 # @dgkit/resize-observer
 
+[![npm](https://img.shields.io/npm/v/@dgkit/resize-observer)](https://www.npmjs.com/package/@dgkit/resize-observer)
+
 A lightweight, **standalone** and **SSR-safe** Angular wrapper around the native
 [`ResizeObserver`](https://developer.mozilla.org/docs/Web/API/ResizeObserver)
 API. Ships **two APIs over one engine** — a signal function and a directive —
