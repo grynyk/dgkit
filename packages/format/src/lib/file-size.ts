@@ -10,6 +10,12 @@ export interface FileSizeOptions {
   readonly maximumFractionDigits?: number;
   /** Separator between the number and the unit (default `' '`). */
   readonly separator?: string;
+  /**
+   * BCP-47 locale (or locales) for the number formatting — controls the decimal
+   * and grouping separators. Defaults to the host's locale. Pass e.g. `'en-US'`
+   * for output that does not vary between environments.
+   */
+  readonly locale?: string | readonly string[];
 }
 
 const BINARY_UNITS = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB'] as const;
@@ -31,6 +37,7 @@ export function fileSize(bytes: number, options: FileSizeOptions = {}): string {
     standard = 'binary',
     maximumFractionDigits = 1,
     separator = ' ',
+    locale,
   } = options;
 
   if (!Number.isFinite(bytes)) {
@@ -49,7 +56,7 @@ export function fileSize(bytes: number, options: FileSizeOptions = {}): string {
     unitIndex += 1;
   }
 
-  const formatted = size.toLocaleString(undefined, {
+  const formatted = size.toLocaleString(locale, {
     maximumFractionDigits: Math.max(0, Math.floor(maximumFractionDigits)),
   });
 
