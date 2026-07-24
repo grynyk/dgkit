@@ -5,6 +5,7 @@ export { injectRouteState } from './lib/route-state';
 export {
   arrayParam,
   booleanParam,
+  dateParam,
   enumParam,
   numberItem,
   numberParam,

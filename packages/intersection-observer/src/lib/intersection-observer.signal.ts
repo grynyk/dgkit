@@ -1,4 +1,4 @@
-import { computed, ElementRef, signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
 
 import { createIntersectionObservation } from './intersection-observer.core';
 import type {
@@ -11,26 +11,8 @@ import {
   normalizeRootMargin,
   normalizeThreshold,
   toAccessor,
+  toTargetAccessor,
 } from './intersection-observer.utils';
-
-function resolveElement(
-  value: Element | ElementRef<Element> | undefined | null,
-): Element | undefined {
-  if (!value) {
-    return undefined;
-  }
-  return value instanceof ElementRef ? value.nativeElement : value;
-}
-
-function toTargetAccessor(
-  target: DgIntersectionTarget,
-): () => Element | undefined {
-  if (typeof target === 'function') {
-    return () => resolveElement(target());
-  }
-  const resolved = resolveElement(target);
-  return () => resolved;
-}
 
 /**
  * Observe an element's intersection with the viewport (or a root) and expose it

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   arrayParam,
   booleanParam,
+  dateParam,
   enumParam,
   numberItem,
   numberParam,
@@ -139,6 +140,43 @@ describe('arrayParam', () => {
 
   it('honours a custom default', () => {
     expect(arrayParam<string>(['x']).parse([])).toEqual(['x']);
+  });
+});
+
+describe('dateParam', () => {
+  it('parses ISO strings to Date', () => {
+    const p = dateParam();
+    const parsed = p.parse(['2026-01-15T00:00:00.000Z']);
+    expect(parsed).toBeInstanceOf(Date);
+    expect(parsed!.toISOString()).toBe('2026-01-15T00:00:00.000Z');
+  });
+
+  it('falls back for invalid/empty/absent values', () => {
+    const fallback = new Date('2020-01-01T00:00:00.000Z');
+    const p = dateParam(fallback);
+    expect(p.parse(['not-a-date'])).toBe(fallback);
+    expect(p.parse([''])).toBe(fallback);
+    expect(p.parse([])).toBe(fallback);
+  });
+
+  it('serializes to ISO, or date-only when requested', () => {
+    const d = new Date('2026-01-15T09:30:00.000Z');
+    expect(dateParam().serialize(d)).toEqual(['2026-01-15T09:30:00.000Z']);
+    expect(dateParam(undefined, { dateOnly: true }).serialize(d)).toEqual([
+      '2026-01-15',
+    ]);
+    expect(dateParam().serialize(undefined)).toBeNull();
+  });
+
+  it('compares by timestamp for default-elision', () => {
+    const p = dateParam();
+    const a = new Date('2026-01-15T00:00:00.000Z');
+    const b = new Date('2026-01-15T00:00:00.000Z');
+    const c = new Date('2026-02-01T00:00:00.000Z');
+    expect(p.equal(a, b)).toBe(true);
+    expect(p.equal(a, c)).toBe(false);
+    expect(p.equal(undefined, undefined)).toBe(true);
+    expect(p.equal(a, undefined)).toBe(false);
   });
 });
 

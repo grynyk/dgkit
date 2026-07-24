@@ -20,6 +20,18 @@ filters and complex forms.
 pnpm add @dgkit/signal-history
 ```
 
+## Compatibility
+
+Works with **Angular 18, 19, 20 and 21**.
+
+| Peer dependency   | Supported range      |
+| ----------------- | -------------------- |
+| `@angular/core`   | `>=18.0.0 <22.0.0`   |
+| `@angular/common` | `>=18.0.0 <22.0.0`   |
+| `rxjs`            | `^6.5.3` or `^7.4.0` |
+
+Angular and RxJS are **peer dependencies** — never bundled into the package.
+
 ## Quick start
 
 ```ts
@@ -126,4 +138,4 @@ reference. Prefer immutable updates (`update(x => ({...x, …}))`).
 
 ## License
 
-[MIT](../../LICENSE) © Danylo Grynyk
+[MIT](../../LICENSE)

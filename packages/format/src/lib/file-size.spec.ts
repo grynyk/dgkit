@@ -41,4 +41,16 @@ describe('fileSize', () => {
     expect(fileSize(Number.NaN)).toBe('0 B');
     expect(fileSize(Number.POSITIVE_INFINITY)).toBe('0 B');
   });
+
+  it('formats with an explicit locale (deterministic separators)', () => {
+    // 1000.5 KiB stays in-unit (< 1024) and is ≥ 1000, so grouping shows:
+    // en-US groups with a comma, de-DE with a dot.
+    const bytes = 1000.5 * 1024;
+    expect(fileSize(bytes, { locale: 'en-US', maximumFractionDigits: 1 })).toBe(
+      '1,000.5 KiB',
+    );
+    expect(fileSize(bytes, { locale: 'de-DE', maximumFractionDigits: 1 })).toBe(
+      '1.000,5 KiB',
+    );
+  });
 });

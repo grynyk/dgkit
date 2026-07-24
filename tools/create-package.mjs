@@ -289,6 +289,24 @@ describe('${camel}', () => {
 `,
 );
 
+const compatibility = pure
+  ? `## Compatibility
+
+> **Framework-agnostic.** \`@dgkit/${name}\` has **no Angular — or any framework — dependency**. It is pure TypeScript with zero runtime dependencies, so it works with **any Angular version** (or React, Vue, plain Node… anywhere JavaScript runs).
+`
+  : `## Compatibility
+
+Works with **Angular 18, 19, 20 and 21**.
+
+| Peer dependency   | Supported range      |
+| ----------------- | -------------------- |
+| \`@angular/core\`   | \`>=18.0.0 <22.0.0\`   |
+| \`@angular/common\` | \`>=18.0.0 <22.0.0\`   |
+| \`rxjs\`            | \`^6.5.3\` or \`^7.4.0\` |
+
+Angular and RxJS are **peer dependencies** — never bundled into the package.
+`;
+
 file(
   'README.md',
   `# @dgkit/${name}
@@ -301,9 +319,10 @@ ${description}
 npm install @dgkit/${name}
 \`\`\`
 
+${compatibility}
 ## License
 
-[MIT](../../LICENSE) © Danylo Grynyk
+[MIT](../../LICENSE)
 `,
 );
 

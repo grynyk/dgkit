@@ -149,6 +149,57 @@ export function enumParam<T extends string>(
   };
 }
 
+/**
+ * A `Date` parameter, serialized as an ISO-8601 string. Unparsable or invalid
+ * dates fall back to the default.
+ *
+ * ```ts
+ * from: dateParam();                 // Date | undefined
+ * since: dateParam(new Date(0));     // Date
+ * ```
+ *
+ * By default the full ISO timestamp is written; pass `{ dateOnly: true }` to
+ * store just the `YYYY-MM-DD` calendar date.
+ */
+export function dateParam(
+  defaultValue?: undefined,
+  options?: DgParamOptions & { readonly dateOnly?: boolean },
+): DgParamDef<Date | undefined, 'query'>;
+export function dateParam(
+  defaultValue: Date,
+  options?: DgParamOptions & { readonly dateOnly?: boolean },
+): DgParamDef<Date, 'query'>;
+export function dateParam(
+  defaultValue?: Date,
+  options: DgParamOptions & { readonly dateOnly?: boolean } = {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): DgParamDef<any, 'query'> {
+  return {
+    source: 'query',
+    key: options.key,
+    defaultValue,
+    parse: (raw) => {
+      const value = first(raw);
+      if (value === undefined || value.trim() === '') {
+        return defaultValue;
+      }
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? defaultValue : date;
+    },
+    serialize: (value) => {
+      if (value === undefined) {
+        return null;
+      }
+      const iso = (value as Date).toISOString();
+      return [options.dateOnly ? iso.slice(0, 10) : iso];
+    },
+    equal: (a, b) =>
+      a instanceof Date && b instanceof Date
+        ? a.getTime() === b.getTime()
+        : a === b,
+  };
+}
+
 /** Per-item codec used by {@link arrayParam}. */
 export interface DgArrayItemCodec<T> {
   readonly parse: (raw: string) => T | undefined;
