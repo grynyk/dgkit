@@ -1,6 +1,7 @@
 dist
 coverage
 .nx
-pnpm-lock.yaml
+.yarn
+yarn.lock
 **/CHANGELOG.md
 node_modules

@@ -6,28 +6,28 @@ workflow, conventions and the release process.
 ## Prerequisites
 
 - **Node.js** `^20.19 || ^22.12 || ^24` — run `nvm use` to match [`.nvmrc`](./.nvmrc) (`24.13.0`).
-- **pnpm** `>=10` — `corepack enable` or `npm i -g pnpm@10`.
+- **Yarn** `>=4` (Berry) — provisioned by `corepack enable`.
 
 ```bash
 git clone <your-fork-url> dgkit
 cd dgkit
 nvm use
-pnpm install
+yarn install
 ```
 
 ## Everyday commands
 
 ```bash
-pnpm build            # build all packages
-pnpm test             # Vitest + coverage (all packages)
-pnpm lint             # ESLint (type-aware)
-pnpm typecheck        # tsc --noEmit
-pnpm format           # Prettier --write
-pnpm verify           # everything CI runs, locally
+yarn build            # build all packages
+yarn test             # Vitest + coverage (all packages)
+yarn lint             # ESLint (type-aware)
+yarn typecheck        # tsc --noEmit
+yarn format           # Prettier --write
+yarn verify           # everything CI runs, locally
 ```
 
-Scope any target to one project with Nx, e.g. `pnpm nx test resize-observer`.
-Nx caches results and `pnpm nx affected -t build test lint` only runs what your
+Scope any target to one project with Nx, e.g. `yarn nx test resize-observer`.
+Nx caches results and `yarn nx affected -t build test lint` only runs what your
 changes touched.
 
 ## Project conventions
@@ -45,8 +45,8 @@ changes touched.
 ## Adding a package
 
 ```bash
-pnpm new:package <name> "<one-line description>"        # Angular package
-pnpm new:package <name> "<description>" --pure          # no Angular peers
+yarn new:package <name> "<one-line description>"        # Angular package
+yarn new:package <name> "<description>" --pure          # no Angular peers
 ```
 
 Then implement it, document it in its `README.md`, and add it to the table in the
@@ -70,7 +70,7 @@ chore: bump nx to 23.1.0
 Every PR that changes a published package **must** include a changeset:
 
 ```bash
-pnpm changeset
+yarn changeset
 ```
 
 Choose the package(s) and bump (patch/minor/major) and write a short summary.
@@ -82,7 +82,7 @@ with npm provenance.
 
 1. Branch off `main`.
 2. Keep changes focused; add/adjust tests.
-3. Run `pnpm verify` locally.
+3. Run `yarn verify` locally.
 4. Include a changeset when applicable.
 5. Open the PR — CI must be green before review.
 

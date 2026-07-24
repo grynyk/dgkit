@@ -3,12 +3,12 @@
  * Scaffold a new publishable @dgkit package under `packages/<name>/`.
  *
  * Usage:
- *   pnpm new:package <kebab-name> "<one-line description>" [--pure]
+ *   yarn new:package <kebab-name> "<one-line description>" [--pure]
  *   node tools/create-package.mjs media-query "Angular media-query utilities."
  *
  * Generates a package mirroring @dgkit/resize-observer's structure: its own
  * package.json / project.json / ng-package.json, tsconfigs, Vitest config and
- * setup, a stub source + spec, README and CHANGELOG — wired into the Nx + pnpm
+ * setup, a stub source + spec, README and CHANGELOG — wired into the Nx + Yarn
  * workspace and ready for `nx build|test|lint|typecheck`.
  *
  * `--pure` omits the Angular peer dependencies (for framework-free packages
@@ -26,7 +26,7 @@ const [rawName, ...descParts] = argv.filter((a) => !a.startsWith('--'));
 
 if (!rawName) {
   console.error(
-    'Usage: pnpm new:package <kebab-name> "<description>" [--pure]',
+    'Usage: yarn new:package <kebab-name> "<description>" [--pure]',
   );
   process.exit(1);
 }
@@ -83,12 +83,9 @@ file(
     },
     keywords: ['angular', 'standalone', 'ssr', name, 'dgkit'],
     sideEffects: false,
-    // `directory` points publishing at the ng-packagr output; the source dir is
-    // not itself publishable. tools/prepare-publish.mjs strips it from dist.
-    publishConfig: {
-      access: 'public',
-      directory: `../../dist/packages/${name}`,
-    },
+    // The publishable artifact is the ng-packagr output in dist/packages/<name>;
+    // tools/publish-dist.mjs publishes those built directories directly.
+    publishConfig: { access: 'public' },
     ...(pure ? {} : { peerDependencies: reference.peerDependencies }),
     dependencies: { tslib: '^2.3.0' },
   }),
@@ -301,7 +298,7 @@ ${description}
 ## Installation
 
 \`\`\`bash
-pnpm add @dgkit/${name}
+npm install @dgkit/${name}
 \`\`\`
 
 ## License
@@ -320,7 +317,7 @@ Managed by [Changesets](https://github.com/changesets/changesets).
 
 console.log(`\n✔ Created packages/${name} (@dgkit/${name})\n`);
 console.log('Next steps:');
-console.log('  1. pnpm install');
+console.log('  1. yarn install');
 console.log(`  2. implement src/lib/${name}.ts`);
-console.log(`  3. pnpm nx test ${name} && pnpm nx build ${name}`);
-console.log('  4. pnpm changeset  # describe the new package\n');
+console.log(`  3. yarn nx test ${name} && yarn nx build ${name}`);
+console.log('  4. yarn changeset  # describe the new package\n');

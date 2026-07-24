@@ -25,8 +25,7 @@
   ],
   "sideEffects": false,
   "publishConfig": {
-    "access": "public",
-    "directory": "../../dist/packages/format"
+    "access": "public"
   },
   "dependencies": {
     "tslib": "^2.3.0"

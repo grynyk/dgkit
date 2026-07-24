@@ -34,13 +34,10 @@ Every package is standalone, tree-shakeable, SSR-safe and **zoneless-friendly** 
 native callbacks write signals directly, with no `NgZone` and no assumption that
 zone.js is loaded.
 
-Planned: `@dgkit/media-query`, `@dgkit/viewport`, `@dgkit/click-outside`,
-`@dgkit/storage`.
-
 ## Tech stack
 
 - **[Nx](https://nx.dev)** — task running, caching and `affected` graph
-- **[pnpm](https://pnpm.io)** workspaces
+- **[Yarn](https://yarnpkg.com)** workspaces
 - **Angular 21** (standalone + signals), **TypeScript 5.9**, **RxJS 7**
 - **[ng-packagr](https://github.com/ng-packagr/ng-packagr)** — Angular Package Format builds
 - **Vitest** (+ Analog) — every package tested with enforced coverage thresholds
@@ -51,38 +48,38 @@ Planned: `@dgkit/media-query`, `@dgkit/viewport`, `@dgkit/click-outside`,
 ## Requirements
 
 - **Node.js** `^20.19 || ^22.12 || ^24` (see [`.nvmrc`](./.nvmrc) → `24.13.0`)
-- **pnpm** `>=10` (pinned via `packageManager`)
+- **Yarn** `>=4` (Berry, pinned via `packageManager` + Corepack)
 
 ```bash
 nvm use            # picks up .nvmrc
-corepack enable    # or: npm i -g pnpm@10
-pnpm install
+corepack enable    # provisions Yarn 4 from packageManager
+yarn install
 ```
 
 ## Common commands
 
 ```bash
-pnpm build                 # build every package (nx run-many -t build)
-pnpm test                  # Vitest + coverage across all packages
-pnpm lint                  # ESLint (type-aware)
-pnpm typecheck             # tsc --noEmit
-pnpm format                # Prettier write
-pnpm playground            # serve the demo app (nx serve playground)
-pnpm verify                # format:check + lint + typecheck + test + build
+yarn build                 # build every package (nx run-many -t build)
+yarn test                  # Vitest + coverage across all packages
+yarn lint                  # ESLint (type-aware)
+yarn typecheck             # tsc --noEmit
+yarn format                # Prettier write
+yarn playground            # serve the demo app (nx serve playground)
+yarn verify                # format:check + lint + typecheck + test + build
 ```
 
 Target a single project with Nx:
 
 ```bash
-pnpm nx build resize-observer
-pnpm nx test resize-observer
+yarn nx build resize-observer
+yarn nx test resize-observer
 ```
 
 ## Adding a new package
 
 ```bash
-pnpm new:package media-query "Angular media-query utilities."
-pnpm new:package slugify "String slug helpers." --pure   # no Angular peers
+yarn new:package media-query "Angular media-query utilities."
+yarn new:package slugify "String slug helpers." --pure   # no Angular peers
 ```
 
 This scaffolds `packages/<name>/` from the resize-observer template with its own
@@ -107,7 +104,7 @@ dgkit/
 ├── .changeset/          # changesets config + pending changes
 ├── .github/workflows/   # CI + release
 ├── nx.json
-├── pnpm-workspace.yaml
+├── .yarnrc.yml
 ├── tsconfig.base.json
 ├── eslint.config.mjs
 └── prettier.config.mjs
@@ -118,9 +115,9 @@ dgkit/
 Releases are driven by [Changesets](https://github.com/changesets/changesets):
 
 ```bash
-pnpm changeset             # describe your change (choose bump per package)
-pnpm version-packages      # apply versions + update changelogs
-pnpm release               # build + changeset publish (CI does this on main)
+yarn changeset             # describe your change (choose bump per package)
+yarn version-packages      # apply versions + update changelogs
+yarn release               # build + changeset publish (CI does this on main)
 ```
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow.
