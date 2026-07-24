@@ -43,8 +43,8 @@ export default defineConfig({
       '@dgkit/format': fileURLToPath(
         new URL('../../packages/format/src/index.ts', import.meta.url),
       ),
-      '@dgkit/file-download': fileURLToPath(
-        new URL('../../packages/file-download/src/index.ts', import.meta.url),
+      '@dgkit/blob-download': fileURLToPath(
+        new URL('../../packages/blob-download/src/index.ts', import.meta.url),
       ),
     },
   },

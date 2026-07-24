@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/packages/file-download-spec",
+    "outDir": "../../dist/out-tsc/packages/blob-download-spec",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "types": ["node", "vitest/globals"],

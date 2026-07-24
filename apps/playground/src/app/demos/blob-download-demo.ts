@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { downloadBlob, isDownloadSupported } from '@dgkit/file-download';
+import { downloadBlob, isDownloadSupported } from '@dgkit/blob-download';
 
 import { DemoCard } from '../ui/demo-card';
 
 @Component({
-  selector: 'dg-file-download-demo',
+  selector: 'dg-blob-download-demo',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DemoCard],
   template: `
     <dg-demo-card
-      pkg="file-download"
+      pkg="blob-download"
       blurb="Trigger a real browser download from a Blob, with no memory leaks."
     >
       <input
@@ -31,9 +31,9 @@ import { DemoCard } from '../ui/demo-card';
     </dg-demo-card>
   `,
 })
-export class FileDownloadDemo {
+export class BlobDownloadDemo {
   protected readonly supported = isDownloadSupported();
-  protected readonly content = signal('Hello from @dgkit/file-download!');
+  protected readonly content = signal('Hello from @dgkit/blob-download!');
   protected readonly downloads = signal(0);
 
   protected download(): void {

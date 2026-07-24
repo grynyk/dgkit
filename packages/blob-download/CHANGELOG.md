@@ -1,3 +1,3 @@
-# @dgkit/file-download
+# @dgkit/blob-download
 
 Managed by [Changesets](https://github.com/changesets/changesets).

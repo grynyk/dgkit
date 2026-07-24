@@ -1,6 +1,6 @@
-# @dgkit/file-download
+# @dgkit/blob-download
 
-[![npm](https://img.shields.io/npm/v/@dgkit/file-download)](https://www.npmjs.com/package/@dgkit/file-download)
+[![npm](https://img.shields.io/npm/v/@dgkit/blob-download)](https://www.npmjs.com/package/@dgkit/blob-download)
 
 A tiny, **framework-free** helper for triggering a browser download from a
 `Blob` — the "create an object URL, click a hidden `<a download>`, clean up"
@@ -23,12 +23,12 @@ downloadBlob('report.csv', csv);
 ## Installation
 
 ```bash
-yarn add @dgkit/file-download
+yarn add @dgkit/blob-download
 ```
 
 ## Compatibility
 
-> **Framework-agnostic.** `@dgkit/file-download` has **no Angular — or any
+> **Framework-agnostic.** `@dgkit/blob-download` has **no Angular — or any
 > framework — dependency**. It is pure TypeScript with zero runtime
 > dependencies, so it works with **any Angular version** (or React, Vue,
 > plain Node… anywhere JavaScript runs).
@@ -36,7 +36,7 @@ yarn add @dgkit/file-download
 ## Usage
 
 ```ts
-import { downloadBlob } from '@dgkit/file-download';
+import { downloadBlob } from '@dgkit/blob-download';
 
 function exportReport(rows: Row[]): void {
   const csv = new Blob([toCsv(rows)], { type: 'text/csv' });
@@ -47,7 +47,7 @@ function exportReport(rows: Row[]): void {
 Guard it in code that might run outside a browser (e.g. during SSR):
 
 ```ts
-import { downloadBlob, isDownloadSupported } from '@dgkit/file-download';
+import { downloadBlob, isDownloadSupported } from '@dgkit/blob-download';
 
 if (isDownloadSupported()) {
   downloadBlob('report.csv', csv);
@@ -82,10 +82,10 @@ Returns whether triggering a download is possible in the current environment
 This package lives in the [`dgkit`](../../README.md) Nx monorepo.
 
 ```bash
-yarn nx build file-download        # ng-packagr production build
-yarn nx test file-download         # Vitest + coverage
-yarn nx lint file-download         # ESLint
-yarn nx typecheck file-download    # tsc --noEmit
+yarn nx build blob-download        # ng-packagr production build
+yarn nx test blob-download         # Vitest + coverage
+yarn nx lint blob-download         # ESLint
+yarn nx typecheck blob-download    # tsc --noEmit
 ```
 
 ## Contributing

@@ -36,7 +36,7 @@
       "@dgkit/route-state": ["packages/route-state/src/index.ts"],
       "@dgkit/mutation-observer": ["packages/mutation-observer/src/index.ts"],
       "@dgkit/signal-storage": ["packages/signal-storage/src/index.ts"],
-      "@dgkit/file-download": ["packages/file-download/src/index.ts"]
+      "@dgkit/blob-download": ["packages/blob-download/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

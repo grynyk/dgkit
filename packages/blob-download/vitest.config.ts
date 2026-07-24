@@ -15,7 +15,7 @@ export default defineConfig({
     include: ['src/**/*.spec.ts'],
     coverage: {
       provider: 'v8',
-      reportsDirectory: '../../coverage/packages/file-download',
+      reportsDirectory: '../../coverage/packages/blob-download',
       reporter: ['text', 'lcov'],
       include: ['src/lib/**/*.ts'],
       exclude: [
