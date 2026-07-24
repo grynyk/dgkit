@@ -1,5 +1,14 @@
 # @dgkit/clipboard
 
+## 0.1.1
+
+### Patch Changes
+
+- c67c628: Fall back to the off-screen `textarea` + `execCommand` path when the async
+  Clipboard API rejects at call time (for example when permission is denied),
+  rather than only when the API is absent. If the fallback also fails, the
+  original error is preserved on the operation state.
+
 ## 0.1.0
 
 ### Minor Changes

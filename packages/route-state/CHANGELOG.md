@@ -1,5 +1,13 @@
 # @dgkit/route-state
 
+## 0.2.0
+
+### Minor Changes
+
+- 5ba24d6: Add a `dateParam` codec that maps an ISO date string in the URL to a `Date`
+  signal and back, with invalid or missing values falling back to the provided
+  default.
+
 ## 0.1.0
 
 ### Minor Changes
