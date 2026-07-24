@@ -83,7 +83,12 @@ file(
     },
     keywords: ['angular', 'standalone', 'ssr', name, 'dgkit'],
     sideEffects: false,
-    publishConfig: { access: 'public' },
+    // `directory` points publishing at the ng-packagr output; the source dir is
+    // not itself publishable. tools/prepare-publish.mjs strips it from dist.
+    publishConfig: {
+      access: 'public',
+      directory: `../../dist/packages/${name}`,
+    },
     ...(pure ? {} : { peerDependencies: reference.peerDependencies }),
     dependencies: { tslib: '^2.3.0' },
   }),
