@@ -179,6 +179,25 @@ describe('injectClipboard — execCommand fallback', () => {
     expect(clipboard.status()).toBe('copied');
   });
 
+  it('falls back to execCommand when the async API rejects', async () => {
+    // API present but rejects (e.g. document not focused); fallback available.
+    stub.rejectWith = new Error('NotAllowedError');
+    installExecCommand(true);
+    const clipboard = make({ resetAfter: 0 });
+    await expect(clipboard.copy('recover')).resolves.toBe(true);
+    expect(clipboard.status()).toBe('copied');
+    expect(stub.writes).toContain('recover'); // written via the textarea path
+  });
+
+  it('surfaces the async rejection when the fallback is disabled', async () => {
+    stub.rejectWith = new Error('NotAllowedError');
+    installExecCommand(true);
+    const clipboard = make({ resetAfter: 0, fallback: false });
+    await expect(clipboard.copy('x')).resolves.toBe(false);
+    expect(clipboard.status()).toBe('failed');
+    expect(clipboard.error()).toBeInstanceOf(Error);
+  });
+
   it('treats a rejected execCommand as a failure', async () => {
     removeClipboardApi();
     installExecCommand(false);

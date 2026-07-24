@@ -45,6 +45,10 @@ export function copyWithExecCommand(value: string): boolean {
     textarea.select();
     textarea.setSelectionRange(0, value.length);
     return document.execCommand('copy');
+  } catch {
+    // Some engines (and jsdom) throw instead of returning false — treat any
+    // failure uniformly so the caller can fall back or report cleanly.
+    return false;
   } finally {
     textarea.remove();
   }
@@ -113,6 +117,35 @@ export function injectClipboard(
     error.set(undefined);
   }
 
+  /**
+   * Try the async Clipboard API first, then the `execCommand` fallback.
+   * Returns `true` on success. If the async API rejects (e.g. the document is
+   * not focused, or permission is denied) the fallback is still attempted — so
+   * a transient API failure does not defeat an otherwise-copyable value.
+   */
+  async function writeToClipboard(value: string): Promise<boolean> {
+    let apiError: unknown;
+    if (isClipboardApiAvailable()) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return true;
+      } catch (cause: unknown) {
+        if (!fallback) {
+          throw cause;
+        }
+        // Remember the real reason; fall through to execCommand.
+        apiError = cause;
+      }
+    }
+    if (fallback && copyWithExecCommand(value)) {
+      return true;
+    }
+    // Surface the original async rejection (any thrown value) when both paths
+    // fail, so `error()` reflects the real cause.
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    throw apiError ?? new Error('Copy command was rejected by the browser.');
+  }
+
   async function copy(value: string): Promise<boolean> {
     if (!supported) {
       status.set('failed');
@@ -126,11 +159,7 @@ export function injectClipboard(
     error.set(undefined);
 
     try {
-      if (isClipboardApiAvailable()) {
-        await navigator.clipboard.writeText(value);
-      } else if (!(fallback && copyWithExecCommand(value))) {
-        throw new Error('Copy command was rejected by the browser.');
-      }
+      await writeToClipboard(value);
 
       // The host may have been destroyed while the promise was in flight.
       if (destroyed) {
