@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/intersection-observer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A lightweight, standalone and SSR-safe Angular IntersectionObserver directive and signal API.",
   "author": {
     "name": "Danylo Grynyk",

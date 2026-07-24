@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/signal-history",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Undo/redo history for Angular signals, with grouped transactions.",
   "author": {
     "name": "Danylo Grynyk",
