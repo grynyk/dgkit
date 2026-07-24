@@ -963,6 +963,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@dgkit/file-download@workspace:packages/file-download":
+  version: 0.0.0-use.local
+  resolution: "@dgkit/file-download@workspace:packages/file-download"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  languageName: unknown
+  linkType: soft
+
 "@dgkit/format@workspace:packages/format":
   version: 0.0.0-use.local
   resolution: "@dgkit/format@workspace:packages/format"
@@ -974,6 +982,18 @@ __metadata:
 "@dgkit/intersection-observer@workspace:packages/intersection-observer":
   version: 0.0.0-use.local
   resolution: "@dgkit/intersection-observer@workspace:packages/intersection-observer"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/common": ">=18.0.0 <22.0.0"
+    "@angular/core": ">=18.0.0 <22.0.0"
+    rxjs: ^6.5.3 || ^7.4.0
+  languageName: unknown
+  linkType: soft
+
+"@dgkit/mutation-observer@workspace:packages/mutation-observer":
+  version: 0.0.0-use.local
+  resolution: "@dgkit/mutation-observer@workspace:packages/mutation-observer"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
@@ -1011,6 +1031,18 @@ __metadata:
 "@dgkit/signal-history@workspace:packages/signal-history":
   version: 0.0.0-use.local
   resolution: "@dgkit/signal-history@workspace:packages/signal-history"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/common": ">=18.0.0 <22.0.0"
+    "@angular/core": ">=18.0.0 <22.0.0"
+    rxjs: ^6.5.3 || ^7.4.0
+  languageName: unknown
+  linkType: soft
+
+"@dgkit/signal-storage@workspace:packages/signal-storage":
+  version: 0.0.0-use.local
+  resolution: "@dgkit/signal-storage@workspace:packages/signal-storage"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
