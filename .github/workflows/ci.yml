@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node & Yarn
         uses: ./.github/actions/setup
       - name: Set Nx SHAs
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@v5
       - name: Prettier check
         run: yarn format:check
       - name: Lint
@@ -45,7 +45,7 @@ jobs:
       - name: Setup Node & Yarn
         uses: ./.github/actions/setup
       - name: Set Nx SHAs
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@v5
       - name: Vitest + coverage
         run: yarn nx affected -t test --base=$NX_BASE --head=$NX_HEAD
 
