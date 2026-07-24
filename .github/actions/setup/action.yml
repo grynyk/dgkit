@@ -1,0 +1,25 @@
+name: Setup
+description: Set up Node.js, Corepack/Yarn and install dependencies (immutable).
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Cache Yarn global cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.yarn/berry/cache
+        key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: yarn-${{ runner.os }}-
+
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --immutable

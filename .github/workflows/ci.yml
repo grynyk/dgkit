@@ -15,62 +15,63 @@ permissions:
   actions: read
 
 jobs:
-  validate:
-    name: Validate
+  lint:
+    name: Lint & typecheck
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          # Full history so `nx affected` can diff against the base branch.
           fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.31.0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install (frozen lockfile)
-        run: pnpm install --frozen-lockfile
-
+      - name: Setup Node & Yarn
+        uses: ./.github/actions/setup
       - name: Set Nx SHAs
         uses: nrwl/nx-set-shas@v4
-
       - name: Prettier check
-        run: pnpm format:check
-
+        run: yarn format:check
       - name: Lint
-        run: pnpm nx affected -t lint --base=$NX_BASE --head=$NX_HEAD
-
+        run: yarn nx affected -t lint --base=$NX_BASE --head=$NX_HEAD
       - name: Typecheck
-        run: pnpm nx affected -t typecheck --base=$NX_BASE --head=$NX_HEAD
+        run: yarn nx affected -t typecheck --base=$NX_BASE --head=$NX_HEAD
 
-      - name: Unit tests (Vitest) + coverage
-        run: pnpm nx affected -t test --base=$NX_BASE --head=$NX_HEAD
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node & Yarn
+        uses: ./.github/actions/setup
+      - name: Set Nx SHAs
+        uses: nrwl/nx-set-shas@v4
+      - name: Vitest + coverage
+        run: yarn nx affected -t test --base=$NX_BASE --head=$NX_HEAD
 
-      - name: Build
-        run: pnpm nx affected -t build --base=$NX_BASE --head=$NX_HEAD
-
+  build:
+    name: Build & package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node & Yarn
+        uses: ./.github/actions/setup
+      - name: Build all packages
+        run: yarn nx run-many -t build
       - name: Verify package contents (npm pack --dry-run)
         run: |
           set -euo pipefail
-          # Build everything so dist exists even if nothing was "affected".
-          pnpm nx run-many -t build
           for pkg in dist/packages/*/; do
             echo "::group::npm pack --dry-run $pkg"
             npm pack --dry-run --json "./$pkg" | node -e '
               const data = JSON.parse(require("fs").readFileSync(0, "utf8"))[0];
-              console.log(`${data.name}@${data.version} — ${data.files.length} files, ${data.entryCount} entries`);
+              console.log(`${data.name}@${data.version} — ${data.files.length} files`);
               for (const f of data.files) console.log("  " + f.path);
               const forbidden = data.files.filter((f) => /\.spec\.|test-setup|\/testing\//.test(f.path));
-              if (forbidden.length) { console.error("Forbidden files in package:", forbidden.map(f=>f.path)); process.exit(1); }
+              if (forbidden.length) { console.error("Forbidden files in package:", forbidden.map((f) => f.path)); process.exit(1); }
             '
             echo "::endgroup::"
           done
