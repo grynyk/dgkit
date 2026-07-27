@@ -971,6 +971,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@dgkit/combobox@workspace:packages/combobox":
+  version: 0.0.0-use.local
+  resolution: "@dgkit/combobox@workspace:packages/combobox"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/common": ">=18.0.0 <22.0.0"
+    "@angular/core": ">=18.0.0 <22.0.0"
+    rxjs: ^6.5.3 || ^7.4.0
+  languageName: unknown
+  linkType: soft
+
 "@dgkit/format@workspace:packages/format":
   version: 0.0.0-use.local
   resolution: "@dgkit/format@workspace:packages/format"
