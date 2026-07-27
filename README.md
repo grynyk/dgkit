@@ -32,6 +32,7 @@ and validated in CI with Vitest and enforced coverage thresholds.
 | [`@dgkit/clipboard`](./packages/clipboard)                         | [![npm](https://img.shields.io/npm/v/@dgkit/clipboard)](https://www.npmjs.com/package/@dgkit/clipboard)                         | Clipboard helper with signal-based operation state.                                                    |
 | [`@dgkit/format`](./packages/format)                               | [![npm](https://img.shields.io/npm/v/@dgkit/format)](https://www.npmjs.com/package/@dgkit/format)                               | Framework-free, grapheme-safe string/number formatting.                                                |
 | [`@dgkit/blob-saver`](./packages/blob-saver)                       | [![npm](https://img.shields.io/npm/v/@dgkit/blob-saver)](https://www.npmjs.com/package/@dgkit/blob-saver)                       | Framework-free helper for triggering a Blob download, with no memory leaks.                            |
+| [`@dgkit/combobox`](./packages/combobox)                           | [![npm](https://img.shields.io/npm/v/@dgkit/combobox)](https://www.npmjs.com/package/@dgkit/combobox)                           | Headless combobox — multiselect, grouping, virtual scrolling, custom templates.                        |
 
 Every package is standalone, tree-shakeable, SSR-safe and **zoneless-friendly** —
 native callbacks write signals directly, with no `NgZone` and no assumption that
@@ -103,7 +104,8 @@ dgkit/
 │   ├── signal-history/
 │   ├── clipboard/
 │   ├── format/
-│   └── blob-saver/
+│   ├── blob-saver/
+│   └── combobox/
 ├── apps/
 │   └── playground/      # manual verification app (not published)
 ├── tools/               # workspace tooling (package scaffolder)

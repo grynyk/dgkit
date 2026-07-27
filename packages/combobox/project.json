@@ -1,0 +1,46 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "combobox",
+  "projectType": "library",
+  "sourceRoot": "packages/combobox/src",
+  "tags": [
+    "scope:public",
+    "type:lib"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/dist/packages/combobox"
+      ],
+      "options": {
+        "command": "ng-packagr -p packages/combobox/ng-package.json -c packages/combobox/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/coverage/packages/combobox"
+      ],
+      "options": {
+        "command": "vitest run --config packages/combobox/vitest.config.ts --coverage"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint packages/combobox/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "tsc -p packages/combobox/tsconfig.lib.json --noEmit",
+          "tsc -p packages/combobox/tsconfig.spec.json --noEmit"
+        ]
+      }
+    }
+  }
+}

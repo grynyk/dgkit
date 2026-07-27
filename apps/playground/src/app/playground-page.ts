@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ClipboardDemo } from './demos/clipboard-demo';
 import { BlobSaverDemo } from './demos/blob-saver-demo';
+import { ComboboxDemo } from './demos/combobox-demo';
 import { FormatDemo } from './demos/format-demo';
 import { IntersectionObserverDemo } from './demos/intersection-observer-demo';
 import { MutationObserverDemo } from './demos/mutation-observer-demo';
@@ -28,6 +29,7 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
     ClipboardDemo,
     FormatDemo,
     BlobSaverDemo,
+    ComboboxDemo,
   ],
   template: `
     <div class="grid">
@@ -40,6 +42,7 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
       <dg-clipboard-demo />
       <dg-format-demo />
       <dg-blob-saver-demo />
+      <dg-combobox-demo />
     </div>
   `,
   styles: `

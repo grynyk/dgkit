@@ -46,6 +46,9 @@ export default defineConfig({
       '@dgkit/blob-saver': fileURLToPath(
         new URL('../../packages/blob-saver/src/index.ts', import.meta.url),
       ),
+      '@dgkit/combobox': fileURLToPath(
+        new URL('../../packages/combobox/src/index.ts', import.meta.url),
+      ),
     },
   },
   build: {

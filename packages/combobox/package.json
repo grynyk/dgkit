@@ -1,0 +1,38 @@
+{
+  "name": "@dgkit/combobox",
+  "version": "0.1.0",
+  "description": "Headless, signal-based combobox with multiselect, grouping, virtual scrolling and custom option templates.",
+  "author": {
+    "name": "Danylo Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/combobox#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/combobox"
+  },
+  "keywords": [
+    "angular",
+    "standalone",
+    "ssr",
+    "combobox",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=18.0.0 <22.0.0",
+    "@angular/core": ">=18.0.0 <22.0.0",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
