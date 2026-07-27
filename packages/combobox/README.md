@@ -89,9 +89,7 @@ interface City {
   `,
 })
 export class CityPicker {
-  protected readonly cities = signal<City[]>([
-    /* … */
-  ]);
+  protected readonly cities = signal<City[]>([/* … */]);
 
   protected readonly cb = injectCombobox<City>({
     options: this.cities,
@@ -111,15 +109,15 @@ cleanup.
 
 ```ts
 injectCombobox<T>({
-  options,           // T[] | Signal<T[]> | (() => T[]) — the source list
-  optionValue,       // (o: T) => unknown  — identity for selection equality
-  optionLabel,       // (o: T) => string   — searchable/display label
-  optionDisabled,    // (o: T) => boolean  — disable an option
-  optionGroup,       // (o: T) => string | undefined — group label (omit = no groups)
-  multiple,          // boolean | Signal<boolean> — enable multiselect
-  filter,            // (o: T, query: string) => boolean — custom matcher
-  closeOnSelect,     // boolean | Signal<boolean> — defaults true (single) / false (multi)
-  virtual,           // { rowHeight, viewportHeight?, overscan? } — fixed-height windowing
+  options, // T[] | Signal<T[]> | (() => T[]) — the source list
+  optionValue, // (o: T) => unknown  — identity for selection equality
+  optionLabel, // (o: T) => string   — searchable/display label
+  optionDisabled, // (o: T) => boolean  — disable an option
+  optionGroup, // (o: T) => string | undefined — group label (omit = no groups)
+  multiple, // boolean | Signal<boolean> — enable multiselect
+  filter, // (o: T, query: string) => boolean — custom matcher
+  closeOnSelect, // boolean | Signal<boolean> — defaults true (single) / false (multi)
+  virtual, // { rowHeight, viewportHeight?, overscan? } — fixed-height windowing
 });
 ```
 
@@ -206,7 +204,7 @@ to the total height:
       [style.transform]="'translateY(' + cb.virtual().offsetY + 'px)'"
     >
       @for (row of cb.virtual().rows; track row.index) {
-        <!-- render row at rowHeight -->
+      <!-- render row at rowHeight -->
       }
     </div>
   </div>

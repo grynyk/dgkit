@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildRows, defaultMatch, type DgComboboxRowConfig } from './combobox.utils';
+import {
+  buildRows,
+  defaultMatch,
+  type DgComboboxRowConfig,
+} from './combobox.utils';
 
 interface City {
   readonly id: number;
@@ -60,14 +64,9 @@ describe('buildRows', () => {
   it('places ungrouped options first, then groups in first-seen order', () => {
     const rows = buildRows(cities, groupedConfig, new Set());
     // Nowhere (ungrouped), then Ukraine header + 2, then Germany header + 1.
-    expect(rows.map((r) => (r.type === 'group' ? `#${r.group}` : r.option?.name))).toEqual([
-      'Nowhere',
-      '#Ukraine',
-      'Kyiv',
-      'Lviv',
-      '#Germany',
-      'Berlin',
-    ]);
+    expect(
+      rows.map((r) => (r.type === 'group' ? `#${r.group}` : r.option?.name)),
+    ).toEqual(['Nowhere', '#Ukraine', 'Kyiv', 'Lviv', '#Germany', 'Berlin']);
   });
 
   it('stamps sequential flat indices across headers and options', () => {
@@ -82,7 +81,10 @@ describe('buildRows', () => {
   });
 
   it('treats empty-string groups as ungrouped', () => {
-    const config: DgComboboxRowConfig<City> = { ...groupedConfig, getGroup: () => '' };
+    const config: DgComboboxRowConfig<City> = {
+      ...groupedConfig,
+      getGroup: () => '',
+    };
     const rows = buildRows(cities, config, new Set());
     expect(rows.every((r) => r.type === 'option')).toBe(true);
   });

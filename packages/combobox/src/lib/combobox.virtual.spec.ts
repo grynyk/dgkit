@@ -55,7 +55,9 @@ describe('computeVirtualWindow', () => {
     expect(window.endIndex).toBe(17); // 10 + 5 + 2 overscan
     expect(window.offsetY).toBe(160); // 8 * 20
     expect(window.totalHeight).toBe(2000);
-    expect(window.rows.map((r) => r.index)).toEqual([8, 9, 10, 11, 12, 13, 14, 15, 16]);
+    expect(window.rows.map((r) => r.index)).toEqual([
+      8, 9, 10, 11, 12, 13, 14, 15, 16,
+    ]);
   });
 
   it('clamps the window to the row bounds', () => {

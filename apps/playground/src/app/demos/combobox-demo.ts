@@ -67,6 +67,7 @@ const ROW_HEIGHT = 36;
           class="dg-input"
           placeholder="Search cities…"
           role="combobox"
+          aria-controls="dg-combobox-listbox"
           [attr.aria-expanded]="cb.open()"
           [attr.aria-activedescendant]="
             cb.activeOption() ? 'city-' + cb.activeOption()!.id : null
@@ -79,6 +80,7 @@ const ROW_HEIGHT = 36;
 
         @if (cb.open()) {
           <div
+            id="dg-combobox-listbox"
             class="panel"
             role="listbox"
             aria-multiselectable="true"
@@ -99,7 +101,8 @@ const ROW_HEIGHT = 36;
                         {{ row.group }}
                       </div>
                     } @else {
-                      <div
+                      <button
+                        type="button"
                         class="option"
                         role="option"
                         [id]="'city-' + row.option!.id"
@@ -112,7 +115,7 @@ const ROW_HEIGHT = 36;
                         <span class="dot" [class.on]="row.selected"></span>
                         <span class="name">{{ row.option!.name }}</span>
                         <span class="muted">{{ row.option!.country }}</span>
-                      </div>
+                      </button>
                     }
                   }
                 </div>
@@ -163,7 +166,13 @@ const ROW_HEIGHT = 36;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      width: 100%;
       padding: 0 0.6rem;
+      font: inherit;
+      text-align: left;
+      color: inherit;
+      background: transparent;
+      border: none;
       cursor: pointer;
     }
     .option.active {

@@ -90,9 +90,12 @@ describe('injectCombobox', () => {
   describe('filtering', () => {
     it('filters options by a case-insensitive label match', () => {
       cb.setQuery('KY');
-      expect(cb.rows().filter((r) => r.type === 'option').map((r) => r.option?.name)).toEqual([
-        'Kyiv',
-      ]);
+      expect(
+        cb
+          .rows()
+          .filter((r) => r.type === 'option')
+          .map((r) => r.option?.name),
+      ).toEqual(['Kyiv']);
       expect(cb.optionCount()).toBe(1);
     });
 
@@ -109,14 +112,19 @@ describe('injectCombobox', () => {
     });
 
     it('supports a custom filter predicate', () => {
-      const custom = make({ filter: (city, q) => city.country.toLowerCase().includes(q) });
+      const custom = make({
+        filter: (city, q) => city.country.toLowerCase().includes(q),
+      });
       custom.setQuery('german');
       expect(custom.optionCount()).toBe(2);
     });
 
     it('reacts to a reactive options source', () => {
       const source = signal<readonly City[]>(CITIES.slice(0, 1));
-      const reactive = injectCombobox<City>({ options: source, optionValue: (c) => c.id });
+      const reactive = injectCombobox<City>({
+        options: source,
+        optionValue: (c) => c.id,
+      });
       expect(reactive.optionCount()).toBe(1);
       source.set(CITIES);
       expect(reactive.optionCount()).toBe(5);

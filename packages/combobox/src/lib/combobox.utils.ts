@@ -57,7 +57,9 @@ export function buildRows<T>(
 
   if (!config.getGroup) {
     for (const option of options) {
-      rows.push(optionRow(option, rows.length, undefined, config, selectedValues));
+      rows.push(
+        optionRow(option, rows.length, undefined, config, selectedValues),
+      );
     }
     return rows;
   }
@@ -82,7 +84,9 @@ export function buildRows<T>(
   }
 
   for (const option of ungrouped) {
-    rows.push(optionRow(option, rows.length, undefined, config, selectedValues));
+    rows.push(
+      optionRow(option, rows.length, undefined, config, selectedValues),
+    );
   }
 
   for (const group of order) {
@@ -94,7 +98,7 @@ export function buildRows<T>(
       disabled: false,
       active: false,
     });
-    for (const option of byGroup.get(group)!) {
+    for (const option of byGroup.get(group) ?? []) {
       rows.push(optionRow(option, rows.length, group, config, selectedValues));
     }
   }

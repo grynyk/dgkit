@@ -4,10 +4,7 @@
     "outDir": "../../dist/out-tsc/packages/combobox-spec",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "types": [
-      "node",
-      "vitest/globals"
-    ],
+    "types": ["node", "vitest/globals"],
     "esModuleInterop": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,

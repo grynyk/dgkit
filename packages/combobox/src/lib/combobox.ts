@@ -6,7 +6,11 @@ import type {
   DgComboboxRow,
   DgValueOrAccessor,
 } from './combobox.types';
-import { buildRows, defaultMatch, type DgComboboxRowConfig } from './combobox.utils';
+import {
+  buildRows,
+  defaultMatch,
+  type DgComboboxRowConfig,
+} from './combobox.utils';
 import { computeVirtualWindow } from './combobox.virtual';
 
 function toAccessor<T>(value: DgValueOrAccessor<T>): () => T {
@@ -46,11 +50,13 @@ export function injectCombobox<T>(
   const multipleAccessor = toAccessor(options.multiple ?? false);
 
   const getValue = options.optionValue ?? ((option: T): unknown => option);
-  const getLabel = options.optionLabel ?? ((option: T): string => String(option));
+  const getLabel =
+    options.optionLabel ?? ((option: T): string => String(option));
   const getDisabled = options.optionDisabled ?? ((): boolean => false);
   const filterFn =
     options.filter ??
-    ((option: T, query: string): boolean => defaultMatch(getLabel(option), query));
+    ((option: T, query: string): boolean =>
+      defaultMatch(getLabel(option), query));
 
   const rowConfig: DgComboboxRowConfig<T> = {
     getValue,
@@ -67,7 +73,9 @@ export function injectCombobox<T>(
   const selectedState = signal<readonly T[]>([]);
   const activeIndexState = signal(-1);
   const scrollTopState = signal(0);
-  const viewportHeightState = signal(nonNegative(options.virtual?.viewportHeight ?? 0));
+  const viewportHeightState = signal(
+    nonNegative(options.virtual?.viewportHeight ?? 0),
+  );
 
   const multiple = computed(() => Boolean(multipleAccessor()));
 
@@ -88,7 +96,9 @@ export function injectCombobox<T>(
     return all.filter((option) => filterFn(option, query));
   });
 
-  const baseRows = computed(() => buildRows(filteredOptions(), rowConfig, selectedValues()));
+  const baseRows = computed(() =>
+    buildRows(filteredOptions(), rowConfig, selectedValues()),
+  );
 
   const enabledIndexes = computed(() => {
     const indexes: number[] = [];
@@ -101,7 +111,10 @@ export function injectCombobox<T>(
   });
 
   const optionCount = computed(() =>
-    baseRows().reduce((total, row) => total + (row.type === 'option' ? 1 : 0), 0),
+    baseRows().reduce(
+      (total, row) => total + (row.type === 'option' ? 1 : 0),
+      0,
+    ),
   );
 
   const rows = computed<readonly DgComboboxRow<T>[]>(() => {
@@ -110,12 +123,14 @@ export function injectCombobox<T>(
     if (active < 0) {
       return base;
     }
-    return base.map((row) => (row.index === active ? { ...row, active: true } : row));
+    return base.map((row) =>
+      row.index === active ? { ...row, active: true } : row,
+    );
   });
 
   const activeOption = computed<T | undefined>(() => {
     const row = baseRows()[activeIndexState()];
-    return row && row.type === 'option' ? row.option : undefined;
+    return row?.type === 'option' ? row.option : undefined;
   });
 
   const virtual = computed(() =>
@@ -202,7 +217,9 @@ export function injectCombobox<T>(
 
   function deselect(option: T): void {
     const target = getValue(option);
-    selectedState.set(selectedState().filter((current) => getValue(current) !== target));
+    selectedState.set(
+      selectedState().filter((current) => getValue(current) !== target),
+    );
   }
 
   function toggleSelection(option: T): void {
