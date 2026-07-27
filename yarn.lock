@@ -16,8 +16,8 @@ __metadata:
   linkType: hard
 
 "@analogjs/vite-plugin-angular@npm:^2.6.3":
-  version: 2.6.3
-  resolution: "@analogjs/vite-plugin-angular@npm:2.6.3"
+  version: 2.6.4
+  resolution: "@analogjs/vite-plugin-angular@npm:2.6.4"
   dependencies:
     magic-string: "npm:^0.30.21"
     obug: "npm:^2.1.1"
@@ -35,13 +35,13 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/dc50e10d429513813b366a4a08eca40248aaa2c5595dcf891f4a5fc2125c4f2e0c4fd7e42525d58a04196561a56081207167a10faa89fc10ec8ea77e0720ba4b
+  checksum: 10c0/2832905883b7cb7f2bb717653a48fef754b6af4e52d78a2c0ea4894ca6c9f2511f15383c698d459413e50172a9378ac4137ca5a2077a60ab528e31b22bd55877
   languageName: node
   linkType: hard
 
 "@analogjs/vitest-angular@npm:^2.6.3":
-  version: 2.6.3
-  resolution: "@analogjs/vitest-angular@npm:2.6.3"
+  version: 2.6.4
+  resolution: "@analogjs/vitest-angular@npm:2.6.4"
   peerDependencies:
     "@analogjs/vite-plugin-angular": "*"
     "@angular-devkit/architect": ">=0.1700.0 < 0.2300.0 || >=0.2200.0 < 0.2300.0"
@@ -51,7 +51,7 @@ __metadata:
   peerDependenciesMeta:
     zone.js:
       optional: true
-  checksum: 10c0/cf740ff3ddce09619cc32a3b47e484eb395706eb42217934c761083f731f43467df8f429a5375cace4545f0233b8e641175b158b72cd59cab56a11580afbabb1
+  checksum: 10c0/1228508e455fdf86e767c4fa26256f4746b74dc1f48a98c8a8489b0dc84637303c387f562f81ec4eadaa8dd3ed80f5b9cc52af0bb71eea0a53966343120829d1
   languageName: node
   linkType: hard
 
