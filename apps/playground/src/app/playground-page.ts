@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { BettingMathDemo } from './demos/betting-math-demo';
 import { ClipboardDemo } from './demos/clipboard-demo';
 import { BlobSaverDemo } from './demos/blob-saver-demo';
 import { ComboboxDemo } from './demos/combobox-demo';
@@ -30,6 +31,7 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
     FormatDemo,
     BlobSaverDemo,
     ComboboxDemo,
+    BettingMathDemo,
   ],
   template: `
     <div class="grid">
@@ -43,6 +45,7 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
       <dg-format-demo />
       <dg-blob-saver-demo />
       <dg-combobox-demo />
+      <dg-betting-math-demo />
     </div>
   `,
   styles: `

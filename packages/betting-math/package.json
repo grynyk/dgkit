@@ -1,0 +1,33 @@
+{
+  "name": "@dgkit/betting-math",
+  "version": "0.0.0",
+  "description": "Pure, exact-rational sports-betting math: odds format conversion, system bet combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse, each-way settlement, Asian handicap splitting, and cash-out estimates.",
+  "author": {
+    "name": "Danylo Grynyk",
+    "email": "danielgrynyk@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/grynyk/dgkit/tree/main/packages/betting-math#readme",
+  "bugs": {
+    "url": "https://github.com/grynyk/dgkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grynyk/dgkit.git",
+    "directory": "packages/betting-math"
+  },
+  "keywords": [
+    "angular",
+    "standalone",
+    "ssr",
+    "betting-math",
+    "dgkit"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

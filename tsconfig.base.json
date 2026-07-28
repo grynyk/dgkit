@@ -37,7 +37,8 @@
       "@dgkit/mutation-observer": ["packages/mutation-observer/src/index.ts"],
       "@dgkit/signal-storage": ["packages/signal-storage/src/index.ts"],
       "@dgkit/blob-saver": ["packages/blob-saver/src/index.ts"],
-      "@dgkit/combobox": ["packages/combobox/src/index.ts"]
+      "@dgkit/combobox": ["packages/combobox/src/index.ts"],
+      "@dgkit/betting-math": ["packages/betting-math/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

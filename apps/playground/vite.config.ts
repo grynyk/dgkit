@@ -49,6 +49,9 @@ export default defineConfig({
       '@dgkit/combobox': fileURLToPath(
         new URL('../../packages/combobox/src/index.ts', import.meta.url),
       ),
+      '@dgkit/betting-math': fileURLToPath(
+        new URL('../../packages/betting-math/src/index.ts', import.meta.url),
+      ),
     },
   },
   build: {

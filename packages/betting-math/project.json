@@ -1,0 +1,39 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "betting-math",
+  "projectType": "library",
+  "sourceRoot": "packages/betting-math/src",
+  "tags": ["scope:public", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/betting-math"],
+      "options": {
+        "command": "ng-packagr -p packages/betting-math/ng-package.json -c packages/betting-math/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/packages/betting-math"],
+      "options": {
+        "command": "vitest run --config packages/betting-math/vitest.config.ts --coverage"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint packages/betting-math/src --max-warnings 0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "tsc -p packages/betting-math/tsconfig.lib.json --noEmit",
+          "tsc -p packages/betting-math/tsconfig.spec.json --noEmit"
+        ]
+      }
+    }
+  }
+}
