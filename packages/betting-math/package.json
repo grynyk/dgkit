@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/betting-math",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Pure, exact-rational sports-betting math: odds format conversion, system bet combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse, each-way settlement, Asian handicap splitting, and cash-out estimates.",
   "author": {
     "name": "Danylo Grynyk",
