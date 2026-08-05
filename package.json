@@ -34,8 +34,8 @@
     "verify": "yarn format:check && yarn lint && yarn typecheck && yarn test && yarn build"
   },
   "devDependencies": {
-    "@analogjs/vite-plugin-angular": "^2.6.3",
-    "@analogjs/vitest-angular": "^2.6.3",
+    "@analogjs/vite-plugin-angular": "^2.6.4",
+    "@analogjs/vitest-angular": "^2.6.4",
     "@angular/build": "^21.0.0",
     "@angular/common": "~21.2.0",
     "@angular/compiler": "~21.2.0",
@@ -51,7 +51,7 @@
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "fast-check": "^4.9.0",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "ng-packagr": "~22.1.0",
     "nx": "23.1.1",
     "prettier": "^3.6.0",
