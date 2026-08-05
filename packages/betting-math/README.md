@@ -1,11 +1,13 @@
 # @dgkit/betting-math
 
-[![npm](https://img.shields.io/npm/v/@dgkit/betting-math)](https://www.npmjs.com/package/@dgkit/betting-math)
+[![npm](https://img.shields.io/npm/v/@dgkit/betting-math)](https://www.npmjs.com/package/@dgkit/betting-math) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
-Pure, exact-rational sports-betting math: odds format conversion, system bet
+Pure, exact-rational sports-betting math: odds format conversion, market
+analysis (implied probability, overround, de-vigged fair odds), system bet
 combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse,
-each-way settlement, Asian handicap quarter-line splitting, and cash-out
-estimates.
+each-way settlement, Asian handicap quarter-line splitting, cash-out
+estimates, and iGaming affiliate commission economics (CPA, RevShare,
+hybrid, negative carryover).
 
 - ✅ **Exact rational arithmetic** — every calculation happens in an internal
   `Fraction` (`bigint` ratio) type, never floating point, so a chain of
@@ -53,6 +55,28 @@ Supported formats: `decimal`, `fractional`, `american`, `hongkong`, `malay`,
 for each format's valid domain — invalid input throws rather than silently
 producing a plausible-looking wrong price.
 
+### Market analysis — overround and fair odds
+
+```ts
+import {
+  calculateFairOdds,
+  calculateOverround,
+  fraction,
+} from '@dgkit/betting-math';
+
+// A standard -110/-110 two-way market.
+const market = [fraction(191, 100), fraction(191, 100)];
+
+calculateOverround(market); // 9/191 ≈ 4.7% — the book's margin
+calculateFairOdds(market); // [2, 2] — the vig removed, evenly priced
+```
+
+`impliedProbability` converts a single price to its implied chance;
+`calculateOverround`/`calculateFairOdds`/`calculateFairProbabilities` work
+across a whole market (every outcome's odds) at once, using the standard
+proportional de-vig method — see `market.ts`'s JSDoc for why that's the one
+exact-rational method implemented here.
+
 ### System bet settlement
 
 ```ts
@@ -71,6 +95,42 @@ result.totalReturned; // Fraction
 result.profit; // Fraction
 result.lines; // every line settled, including voided ones, for auditability
 ```
+
+### Affiliate commissions
+
+```ts
+import { calculateHybridCommission, fraction } from '@dgkit/betting-math';
+
+// 40 FTDs at $75 CPA, plus 15% of $10,000 NGR.
+const commission = calculateHybridCommission({
+  qualifyingCount: 40,
+  cpaRate: fraction(75, 1),
+  ngr: fraction(10_000, 1),
+  revSharePercent: fraction(15, 100),
+});
+
+commission.cpaPortion; // 3000
+commission.revSharePortion; // 1500
+commission.total; // 4500
+```
+
+A losing period (referred players won more than they lost) makes `ngr`, and
+therefore the RevShare commission, negative. `applyNegativeCarryover` rolls
+that deficit into future periods until it's cleared:
+
+```ts
+import { applyNegativeCarryover, fraction, ZERO } from '@dgkit/betting-math';
+
+applyNegativeCarryover(fraction(-500, 1), fraction(300, 1));
+// { payable: 0, carriedBalance: -200 } — deficit shrinks, nothing paid yet
+
+applyNegativeCarryover(fraction(-200, 1), fraction(800, 1));
+// { payable: 600, carriedBalance: 0 } — deficit clears, the rest is paid
+```
+
+`runCarryoverLedger` folds a whole sequence of periods through this in one
+call, and `applyNegativeCarryover`'s `carryoverCap` option models a capped
+(or, at `ZERO`, a no-carryover) deal instead of an uncapped one.
 
 ### Recipes: common system-bet names
 
@@ -91,19 +151,21 @@ Here's what the common UK/Irish bookmaker names mean in those terms:
 
 ## API overview
 
-| Module              | Exports                                                                                                                           |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `fraction.ts`       | `Fraction`, `fraction`, arithmetic (`addFractions`, …), `fractionFromNumber`/`fractionToNumber`/`fractionToString`, `ZERO`, `ONE` |
-| `odds.ts`           | `parseOdds`, `formatOdds`, `OddsFormat`                                                                                           |
-| `combinations.ts`   | `generateCombinations` — generic `C(n, k)`                                                                                        |
-| `system-bets.ts`    | `getFullCoverLines`, `countFullCoverLines` — no named presets, see Recipes above                                                  |
-| `dead-heat.ts`      | `reduceDeadHeatOdds`                                                                                                              |
-| `rule4.ts`          | `lookupRule4Deduction`, `applyRule4Deduction`, `Rule4Band` — **no default table**, see below                                      |
-| `void-collapse.ts`  | `collapseVoidLegs`                                                                                                                |
-| `each-way.ts`       | `derivePlaceOdds`                                                                                                                 |
-| `asian-handicap.ts` | `splitQuarterLine`, `settleAsianHandicapLine`, `settleAsianHandicap`                                                              |
-| `cash-out.ts`       | `estimateCashOutValue`, `estimateMultiLegCashOutValue` — **approximation**, see below                                             |
-| `settlement.ts`     | `settleLine`, `settleSystemBet` — the orchestrator built on everything above                                                      |
+| Module              | Exports                                                                                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `fraction.ts`       | `Fraction`, `fraction`, arithmetic (`addFractions`, …), `fractionFromNumber`/`fractionToNumber`/`fractionToString`, `maxFraction`/`minFraction`, `ZERO`, `ONE`           |
+| `odds.ts`           | `parseOdds`, `formatOdds`, `OddsFormat`                                                                                                                                  |
+| `market.ts`         | `impliedProbability`, `calculateOverround`, `calculateFairOdds`, `calculateFairProbabilities`                                                                            |
+| `combinations.ts`   | `generateCombinations` — generic `C(n, k)`                                                                                                                               |
+| `system-bets.ts`    | `getFullCoverLines`, `countFullCoverLines` — no named presets, see Recipes above                                                                                         |
+| `dead-heat.ts`      | `reduceDeadHeatOdds`                                                                                                                                                     |
+| `rule4.ts`          | `lookupRule4Deduction`, `applyRule4Deduction`, `Rule4Band` — **no default table**, see below                                                                             |
+| `void-collapse.ts`  | `collapseVoidLegs`                                                                                                                                                       |
+| `each-way.ts`       | `derivePlaceOdds`                                                                                                                                                        |
+| `asian-handicap.ts` | `splitQuarterLine`, `settleAsianHandicapLine`, `settleAsianHandicap`                                                                                                     |
+| `cash-out.ts`       | `estimateCashOutValue`, `estimateMultiLegCashOutValue` — **approximation**, see below                                                                                    |
+| `settlement.ts`     | `settleLine`, `settleSystemBet` — the orchestrator built on everything above                                                                                             |
+| `affiliate.ts`      | `calculateCpaCommission`, `calculateRevShareCommission`, `calculateHybridCommission`, `applyNegativeCarryover`, `runCarryoverLedger` — **no NGR computation**, see below |
 
 ## Rule 4 deductions — bring your own table
 
@@ -141,6 +203,24 @@ reserve full discretion over the price they'll actually offer.
 fair-value estimate (present value at current market odds) with an explicit
 `margin` you supply — treat the result as a reference figure, not a
 guarantee.
+
+## Affiliate commissions — bring your own NGR and deal terms
+
+Like Rule 4 and cash-out, `affiliate.ts` ships no embedded data:
+
+- **No NGR computation.** Net Gaming Revenue is always a number you supply —
+  operators disagree on exactly what nets out (bonuses, chargebacks, payment
+  fees, …) before revenue counts as "net," so this package never derives it
+  from raw deposits/withdrawals itself.
+- **Carryover eligibility is a deal term.** The `periodCommission` you pass
+  to `applyNegativeCarryover`/`runCarryoverLedger` is conventionally the
+  RevShare portion of a period alone — CPA is a flat per-action cost,
+  typically paid regardless of NGR performance, and not clawed back by a
+  losing period.
+- **Payout thresholds aren't modeled.** A minimum-payout threshold on a
+  _positive_ balance (withholding a small payable amount until it
+  accumulates) is a distinct deal term this package doesn't implement —
+  layer it on top of `payable` yourself if your deal has one.
 
 ## Behavior details
 

@@ -14,6 +14,8 @@ export {
   fractionFromNumber,
   fractionToNumber,
   fractionToString,
+  maxFraction,
+  minFraction,
   multiplyFractions,
   ONE,
   reduceFraction,
@@ -25,6 +27,14 @@ export type { Fraction } from './lib/fraction';
 // Odds format conversion
 export { formatOdds, parseOdds } from './lib/odds';
 export type { OddsFormat } from './lib/odds';
+
+// Market analysis — implied probability, overround, de-vigged fair odds
+export {
+  calculateFairOdds,
+  calculateFairProbabilities,
+  calculateOverround,
+  impliedProbability,
+} from './lib/market';
 
 // Combinatorics
 export { generateCombinations } from './lib/combinations';
@@ -74,3 +84,21 @@ export type {
   SettlementLine,
   SettlementResult,
 } from './lib/settlement.types';
+
+// Affiliate commission economics
+export {
+  applyNegativeCarryover,
+  calculateCpaCommission,
+  calculateHybridCommission,
+  calculateRevShareCommission,
+  runCarryoverLedger,
+} from './lib/affiliate';
+export type {
+  CarryoverLedgerEntry,
+  CarryoverLedgerOptions,
+  CarryoverLedgerResult,
+  CarryoverResult,
+  HybridCommissionInput,
+  HybridCommissionResult,
+  NegativeCarryoverOptions,
+} from './lib/affiliate';

@@ -129,6 +129,16 @@ export function compareFractions(a: Fraction, b: Fraction): -1 | 0 | 1 {
   return 0;
 }
 
+/** The larger of two fractions (`a` if they're equal). */
+export function maxFraction(a: Fraction, b: Fraction): Fraction {
+  return compareFractions(a, b) >= 0 ? a : b;
+}
+
+/** The smaller of two fractions (`a` if they're equal). */
+export function minFraction(a: Fraction, b: Fraction): Fraction {
+  return compareFractions(a, b) <= 0 ? a : b;
+}
+
 /**
  * Parse a finite decimal `number` into an exact {@link Fraction}.
  *

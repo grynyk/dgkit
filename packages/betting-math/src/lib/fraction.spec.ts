@@ -9,6 +9,8 @@ import {
   fractionFromNumber,
   fractionToNumber,
   fractionToString,
+  maxFraction,
+  minFraction,
   multiplyFractions,
   ONE,
   reduceFraction,
@@ -168,6 +170,48 @@ describe('compareFractions', () => {
 
   it('distinguishes equal-value fractions with different representations before reduction', () => {
     expect(compareFractions(fraction(2, 4), fraction(1, 2))).toBe(0);
+  });
+});
+
+describe('maxFraction / minFraction', () => {
+  it('picks the larger/smaller of two distinct fractions', () => {
+    expect(maxFraction(fraction(1, 2), fraction(3, 4))).toEqual(fraction(3, 4));
+    expect(minFraction(fraction(1, 2), fraction(3, 4))).toEqual(fraction(1, 2));
+  });
+
+  it('returns the first argument when equal', () => {
+    expect(maxFraction(fraction(2, 4), fraction(1, 2))).toEqual(fraction(2, 4));
+    expect(minFraction(fraction(2, 4), fraction(1, 2))).toEqual(fraction(2, 4));
+  });
+
+  it('the result is always >= (max) or <= (min) both inputs', () => {
+    fc.assert(
+      fc.property(fractionArb, fractionArb, (a, b) => {
+        expect(compareFractions(maxFraction(a, b), a)).toBeGreaterThanOrEqual(
+          0,
+        );
+        expect(compareFractions(maxFraction(a, b), b)).toBeGreaterThanOrEqual(
+          0,
+        );
+        expect(compareFractions(minFraction(a, b), a)).toBeLessThanOrEqual(0);
+        expect(compareFractions(minFraction(a, b), b)).toBeLessThanOrEqual(0);
+      }),
+    );
+  });
+
+  it('the result always equals one of the two inputs by value', () => {
+    fc.assert(
+      fc.property(fractionArb, fractionArb, (a, b) => {
+        const max = maxFraction(a, b);
+        expect(
+          compareFractions(max, a) === 0 || compareFractions(max, b) === 0,
+        ).toBe(true);
+        const min = minFraction(a, b);
+        expect(
+          compareFractions(min, a) === 0 || compareFractions(min, b) === 0,
+        ).toBe(true);
+      }),
+    );
   });
 });
 
