@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/blob-saver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-free helper for triggering a browser file download from a Blob, with no memory leaks.",
   "author": {
     "name": "Danylo Grynyk",
