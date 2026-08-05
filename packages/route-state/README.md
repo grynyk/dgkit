@@ -1,6 +1,6 @@
 # @dgkit/route-state
 
-[![npm](https://img.shields.io/npm/v/@dgkit/route-state)](https://www.npmjs.com/package/@dgkit/route-state)
+[![npm](https://img.shields.io/npm/v/@dgkit/route-state)](https://www.npmjs.com/package/@dgkit/route-state) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 **Type-safe, bidirectional synchronization between Angular signals and the URL.**
 

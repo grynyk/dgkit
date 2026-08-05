@@ -1,6 +1,6 @@
 # @dgkit/combobox
 
-[![npm](https://img.shields.io/npm/v/@dgkit/combobox)](https://www.npmjs.com/package/@dgkit/combobox)
+[![npm](https://img.shields.io/npm/v/@dgkit/combobox)](https://www.npmjs.com/package/@dgkit/combobox) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 A **headless**, **signal-based** combobox controller for Angular. It owns all
 the hard state — panel open, filtering, single/multiple selection, grouping,

@@ -1,6 +1,6 @@
 # @dgkit/intersection-observer
 
-[![npm](https://img.shields.io/npm/v/@dgkit/intersection-observer)](https://www.npmjs.com/package/@dgkit/intersection-observer)
+[![npm](https://img.shields.io/npm/v/@dgkit/intersection-observer)](https://www.npmjs.com/package/@dgkit/intersection-observer) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 A lightweight, **standalone** and **SSR-safe** Angular wrapper around the native
 [`IntersectionObserver`](https://developer.mozilla.org/docs/Web/API/IntersectionObserver)

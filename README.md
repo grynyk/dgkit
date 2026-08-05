@@ -10,6 +10,7 @@ Published under the [`@dgkit`](https://www.npmjs.com/org/dgkit) npm scope.
 
 [![CI](https://github.com/grynyk/dgkit/actions/workflows/ci.yml/badge.svg)](https://github.com/grynyk/dgkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 </div>
 

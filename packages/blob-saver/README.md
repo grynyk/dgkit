@@ -1,6 +1,6 @@
 # @dgkit/blob-saver
 
-[![npm](https://img.shields.io/npm/v/@dgkit/blob-saver)](https://www.npmjs.com/package/@dgkit/blob-saver)
+[![npm](https://img.shields.io/npm/v/@dgkit/blob-saver)](https://www.npmjs.com/package/@dgkit/blob-saver) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 A tiny, **framework-free** helper for triggering a browser download from a
 `Blob` — the "create an object URL, click a hidden `<a download>`, clean up"

@@ -1,6 +1,6 @@
 # @dgkit/clipboard
 
-[![npm](https://img.shields.io/npm/v/@dgkit/clipboard)](https://www.npmjs.com/package/@dgkit/clipboard)
+[![npm](https://img.shields.io/npm/v/@dgkit/clipboard)](https://www.npmjs.com/package/@dgkit/clipboard) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 An **SSR-safe** Angular clipboard helper with **signal-based operation state**.
 The command stays a plain async method; only the state you render is reactive.

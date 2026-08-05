@@ -1,6 +1,6 @@
 # @dgkit/signal-storage
 
-[![npm](https://img.shields.io/npm/v/@dgkit/signal-storage)](https://www.npmjs.com/package/@dgkit/signal-storage)
+[![npm](https://img.shields.io/npm/v/@dgkit/signal-storage)](https://www.npmjs.com/package/@dgkit/signal-storage) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 **Type-safe, bidirectional synchronization between an Angular signal and
 `localStorage`/`sessionStorage`.**

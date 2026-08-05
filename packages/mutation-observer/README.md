@@ -1,6 +1,6 @@
 # @dgkit/mutation-observer
 
-[![npm](https://img.shields.io/npm/v/@dgkit/mutation-observer)](https://www.npmjs.com/package/@dgkit/mutation-observer)
+[![npm](https://img.shields.io/npm/v/@dgkit/mutation-observer)](https://www.npmjs.com/package/@dgkit/mutation-observer) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 A lightweight, **standalone** and **SSR-safe** Angular wrapper around the native
 [`MutationObserver`](https://developer.mozilla.org/docs/Web/API/MutationObserver)

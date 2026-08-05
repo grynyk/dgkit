@@ -1,6 +1,6 @@
 # @dgkit/format
 
-[![npm](https://img.shields.io/npm/v/@dgkit/format)](https://www.npmjs.com/package/@dgkit/format)
+[![npm](https://img.shields.io/npm/v/@dgkit/format)](https://www.npmjs.com/package/@dgkit/format) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 Framework-free, **grapheme-safe** string and number formatting helpers. No
 Angular, no dependencies — just correct little functions you would otherwise
