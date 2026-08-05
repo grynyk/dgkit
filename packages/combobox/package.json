@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/combobox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Headless, signal-based combobox with multiselect, grouping, virtual scrolling and custom option templates.",
   "author": {
     "name": "Danylo Grynyk",
