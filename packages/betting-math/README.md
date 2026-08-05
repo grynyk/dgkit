@@ -3,11 +3,12 @@
 [![npm](https://img.shields.io/npm/v/@dgkit/betting-math)](https://www.npmjs.com/package/@dgkit/betting-math) [![Playground](https://img.shields.io/badge/playground-live-blueviolet)](https://grynyk.github.io/dgkit/#/)
 
 Pure, exact-rational sports-betting math: odds format conversion, market
-analysis (implied probability, overround, de-vigged fair odds), system bet
-combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse,
-each-way settlement, Asian handicap quarter-line splitting, cash-out
-estimates, and iGaming affiliate commission economics (CPA, RevShare,
-hybrid, negative carryover).
+analysis (implied probability, overround, de-vigged fair odds), arbitrage
+(surebet) detection and stake-splitting, system bet combinatorics, dead
+heat reduction, Rule 4 deductions, void-leg collapse, each-way settlement,
+Asian handicap quarter-line splitting, cash-out estimates, and iGaming
+affiliate commission economics (CPA, RevShare, hybrid, negative
+carryover).
 
 - ✅ **Exact rational arithmetic** — every calculation happens in an internal
   `Fraction` (`bigint` ratio) type, never floating point, so a chain of
@@ -76,6 +77,31 @@ calculateFairOdds(market); // [2, 2] — the vig removed, evenly priced
 across a whole market (every outcome's odds) at once, using the standard
 proportional de-vig method — see `market.ts`'s JSDoc for why that's the one
 exact-rational method implemented here.
+
+### Arbitrage (surebet) stake-splitting
+
+```ts
+import { calculateArbitrageStakes, fraction } from '@dgkit/betting-math';
+
+// Best price per outcome, sourced from two different bookmakers.
+const result = calculateArbitrageStakes(
+  [fraction(2, 1), fraction(5, 2)],
+  fraction(100, 1),
+);
+
+result.isArbitrage; // true
+result.lines; // [{ odds: 2, stake: 500/9, returned: 1000/9 }, { odds: 5/2, stake: 400/9, returned: 1000/9 }]
+result.guaranteedProfit; // 100/9 ≈ 11.11 — the same no matter which outcome wins
+result.roi; // 1/9 ≈ 11.1%
+```
+
+`calculateArbitrageStakes` splits a stake proportionally to each outcome's
+implied probability — the same de-vig math `calculateFairOdds` uses,
+applied to money instead of odds — so every line returns _exactly_ the same
+amount, verified bit-for-bit by property tests, not just "close enough."
+Feed it a single bookmaker's own market instead of the best cross-book
+prices and it still works, just with a negative `roi`; `detectArbitrage` is
+a cheaper yes/no check when you don't need the full stake split.
 
 ### System bet settlement
 
@@ -156,6 +182,7 @@ Here's what the common UK/Irish bookmaker names mean in those terms:
 | `fraction.ts`       | `Fraction`, `fraction`, arithmetic (`addFractions`, …), `fractionFromNumber`/`fractionToNumber`/`fractionToString`, `maxFraction`/`minFraction`, `ZERO`, `ONE`           |
 | `odds.ts`           | `parseOdds`, `formatOdds`, `OddsFormat`                                                                                                                                  |
 | `market.ts`         | `impliedProbability`, `calculateOverround`, `calculateFairOdds`, `calculateFairProbabilities`                                                                            |
+| `arbitrage.ts`      | `detectArbitrage`, `calculateArbitrageStakes`                                                                                                                            |
 | `combinations.ts`   | `generateCombinations` — generic `C(n, k)`                                                                                                                               |
 | `system-bets.ts`    | `getFullCoverLines`, `countFullCoverLines` — no named presets, see Recipes above                                                                                         |
 | `dead-heat.ts`      | `reduceDeadHeatOdds`                                                                                                                                                     |

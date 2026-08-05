@@ -36,6 +36,10 @@ export {
   impliedProbability,
 } from './lib/market';
 
+// Arbitrage (surebet) detection and stake-splitting
+export { calculateArbitrageStakes, detectArbitrage } from './lib/arbitrage';
+export type { ArbitrageLine, ArbitrageResult } from './lib/arbitrage';
+
 // Combinatorics
 export { generateCombinations } from './lib/combinations';
 export { countFullCoverLines, getFullCoverLines } from './lib/system-bets';
