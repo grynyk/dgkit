@@ -51,7 +51,7 @@
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "fast-check": "^4.9.0",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "ng-packagr": "~22.1.0",
     "nx": "23.1.0",
     "prettier": "^3.6.0",
