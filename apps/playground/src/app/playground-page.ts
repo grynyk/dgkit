@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { BettingMathAffiliateDemo } from './demos/betting-math-affiliate-demo';
 import { BettingMathDemo } from './demos/betting-math-demo';
+import { BettingMathMarketDemo } from './demos/betting-math-market-demo';
 import { ClipboardDemo } from './demos/clipboard-demo';
 import { BlobSaverDemo } from './demos/blob-saver-demo';
 import { ComboboxDemo } from './demos/combobox-demo';
@@ -32,6 +34,8 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
     BlobSaverDemo,
     ComboboxDemo,
     BettingMathDemo,
+    BettingMathMarketDemo,
+    BettingMathAffiliateDemo,
   ],
   template: `
     <div class="grid">
@@ -46,6 +50,8 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
       <dg-blob-saver-demo />
       <dg-combobox-demo />
       <dg-betting-math-demo />
+      <dg-betting-math-market-demo />
+      <dg-betting-math-affiliate-demo />
     </div>
   `,
   styles: `
