@@ -3,6 +3,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BettingMathAffiliateDemo } from './demos/betting-math-affiliate-demo';
 import { BettingMathArbitrageDemo } from './demos/betting-math-arbitrage-demo';
 import { BettingMathDemo } from './demos/betting-math-demo';
+import { BettingMathEvDemo } from './demos/betting-math-ev-demo';
+import { BettingMathFreeBetDemo } from './demos/betting-math-free-bet-demo';
+import { BettingMathHedgeDemo } from './demos/betting-math-hedge-demo';
+import { BettingMathKellyDemo } from './demos/betting-math-kelly-demo';
 import { BettingMathMarketDemo } from './demos/betting-math-market-demo';
 import { ClipboardDemo } from './demos/clipboard-demo';
 import { BlobSaverDemo } from './demos/blob-saver-demo';
@@ -38,6 +42,10 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
     BettingMathMarketDemo,
     BettingMathArbitrageDemo,
     BettingMathAffiliateDemo,
+    BettingMathEvDemo,
+    BettingMathKellyDemo,
+    BettingMathHedgeDemo,
+    BettingMathFreeBetDemo,
   ],
   template: `
     <div class="grid">
@@ -55,6 +63,10 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
       <dg-betting-math-market-demo />
       <dg-betting-math-arbitrage-demo />
       <dg-betting-math-affiliate-demo />
+      <dg-betting-math-ev-demo />
+      <dg-betting-math-kelly-demo />
+      <dg-betting-math-hedge-demo />
+      <dg-betting-math-free-bet-demo />
     </div>
   `,
   styles: `

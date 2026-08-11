@@ -4,11 +4,12 @@
 
 Pure, exact-rational sports-betting math: odds format conversion, market
 analysis (implied probability, overround, de-vigged fair odds), arbitrage
-(surebet) detection and stake-splitting, system bet combinatorics, dead
-heat reduction, Rule 4 deductions, void-leg collapse, each-way settlement,
-Asian handicap quarter-line splitting, cash-out estimates, and iGaming
-affiliate commission economics (CPA, RevShare, hybrid, negative
-carryover).
+(surebet) detection and stake-splitting, expected value and Kelly criterion
+staking, hedging (green-up, both plain and exchange back-to-lay) and
+matched-betting free-bet extraction, system bet combinatorics, dead heat
+reduction, Rule 4 deductions, void-leg collapse, each-way settlement, Asian
+handicap quarter-line splitting, cash-out estimates, and iGaming affiliate
+commission economics (CPA, RevShare, hybrid, negative carryover).
 
 - ✅ **Exact rational arithmetic** — every calculation happens in an internal
   `Fraction` (`bigint` ratio) type, never floating point, so a chain of
@@ -103,6 +104,89 @@ Feed it a single bookmaker's own market instead of the best cross-book
 prices and it still works, just with a negative `roi`; `detectArbitrage` is
 a cheaper yes/no check when you don't need the full stake split.
 
+### Expected value and Kelly criterion staking
+
+```ts
+import {
+  calculateExpectedValue,
+  calculateKellyStake,
+  fraction,
+} from '@dgkit/betting-math';
+
+// You believe the true chance is 60%; the market prices it at odds of 2 (50%).
+calculateExpectedValue(fraction(3, 5), fraction(2, 1), fraction(100, 1));
+// { expectedValue: 20, edge: 1/5, impliedProbability: 1/2, stake: 100 }
+
+calculateKellyStake(fraction(3, 5), fraction(2, 1), fraction(1_000, 1));
+// full Kelly: recommendedStake 200 (a 20% edge on a bankroll of 1,000)
+
+calculateKellyStake(
+  fraction(3, 5),
+  fraction(2, 1),
+  fraction(1_000, 1),
+  fraction(1, 2),
+);
+// half Kelly: recommendedStake 100 — same edge, half the variance
+```
+
+`calculateEdge`/`calculateExpectedValue` compare a bettor's own probability
+estimate against the price on offer — `edge = trueProbability × decimalOdds
+− 1`, exactly `0` at a perfectly fair price. `calculateKellyStake` builds on
+the same edge to size a bankroll-fraction stake (`f* = edge / (decimalOdds
+− 1)`), with an optional `kellyFraction` multiplier for fractional-Kelly
+staking; the recommended stake is clamped to `[0, bankroll]`, but the
+underlying `fullKellyFraction`/`appliedFraction` stay signed so a negative
+edge is visible rather than silently zeroed out.
+
+### Hedging (green-up)
+
+```ts
+import {
+  calculateExchangeLayStake,
+  calculateHedgeStake,
+  fraction,
+  ZERO,
+} from '@dgkit/betting-math';
+
+// Backed $10 at odds of 5; the market's since moved to odds of 2.
+calculateHedgeStake(fraction(10, 1), fraction(5, 1), fraction(2, 1));
+// hedgeStake 25, guaranteedProfit 15 either way
+
+// Same position, hedged with a lay bet on an exchange instead (5% commission).
+calculateExchangeLayStake(
+  fraction(10, 1),
+  fraction(5, 1),
+  fraction(5, 1),
+  fraction(1, 20),
+);
+// layStake ≈ 10.10, guaranteedProfit ≈ -0.40 — a near-break-even "qualifying bet"
+```
+
+`calculateHedgeStake` is a plain second back bet at another bookmaker (both
+stakes fully at risk) — the same "stake × odds is equal across every
+winning leg" invariant as `calculateArbitrageStakes`, just anchored to an
+already-placed first leg. `calculateExchangeLayStake` is the betting-
+exchange equivalent: a lay bet that risks only its liability, priced net of
+`commission`. The two `layStake`/`hedgeStake` numbers coincide at `commission
+= 0`, but `guaranteedProfit` doesn't — a lay liability and a second back bet
+are different instruments.
+
+### Matched-betting free-bet extraction
+
+```ts
+import { calculateFreeBetLayStake, fraction, ZERO } from '@dgkit/betting-math';
+
+// A $10 stake-not-returned free bet at odds of 5, laid at the same odds, no commission.
+calculateFreeBetLayStake(fraction(10, 1), fraction(5, 1), fraction(5, 1), ZERO);
+// layStake 8, guaranteedProfit 8, extractionRate 4/5 (80%)
+```
+
+A free bet pays out only its winnings if it wins — the stake was never the
+bettor's money — and costs nothing if it loses. `calculateFreeBetLayStake`
+solves for the lay stake that extracts a guaranteed cash profit either way;
+`extractionRate` (`guaranteedProfit / freeBetStake`) is the headline
+metric bettors compare across offers.
+
 ### System bet settlement
 
 ```ts
@@ -183,6 +267,10 @@ Here's what the common UK/Irish bookmaker names mean in those terms:
 | `odds.ts`           | `parseOdds`, `formatOdds`, `OddsFormat`                                                                                                                                  |
 | `market.ts`         | `impliedProbability`, `calculateOverround`, `calculateFairOdds`, `calculateFairProbabilities`                                                                            |
 | `arbitrage.ts`      | `detectArbitrage`, `calculateArbitrageStakes`                                                                                                                            |
+| `expected-value.ts` | `calculateEdge`, `calculateExpectedValue`                                                                                                                                |
+| `kelly.ts`          | `calculateKellyStake`                                                                                                                                                    |
+| `hedge.ts`          | `calculateHedgeStake`, `calculateExchangeLayStake`                                                                                                                       |
+| `free-bet.ts`       | `calculateFreeBetLayStake`                                                                                                                                               |
 | `combinations.ts`   | `generateCombinations` — generic `C(n, k)`                                                                                                                               |
 | `system-bets.ts`    | `getFullCoverLines`, `countFullCoverLines` — no named presets, see Recipes above                                                                                         |
 | `dead-heat.ts`      | `reduceDeadHeatOdds`                                                                                                                                                     |

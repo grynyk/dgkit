@@ -40,6 +40,22 @@ export {
 export { calculateArbitrageStakes, detectArbitrage } from './lib/arbitrage';
 export type { ArbitrageLine, ArbitrageResult } from './lib/arbitrage';
 
+// Expected value and edge
+export { calculateEdge, calculateExpectedValue } from './lib/expected-value';
+export type { ExpectedValueResult } from './lib/expected-value';
+
+// Kelly criterion staking
+export { calculateKellyStake } from './lib/kelly';
+export type { KellyResult } from './lib/kelly';
+
+// Hedging / green-up (cash back-to-back, and exchange back-to-lay with commission)
+export { calculateExchangeLayStake, calculateHedgeStake } from './lib/hedge';
+export type { ExchangeLayResult, HedgeResult } from './lib/hedge';
+
+// Matched-betting free-bet (stake-not-returned) extraction
+export { calculateFreeBetLayStake } from './lib/free-bet';
+export type { FreeBetLayResult } from './lib/free-bet';
+
 // Combinatorics
 export { generateCombinations } from './lib/combinations';
 export { countFullCoverLines, getFullCoverLines } from './lib/system-bets';
