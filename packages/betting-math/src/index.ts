@@ -69,6 +69,14 @@ export type { ExchangeLayResult, HedgeResult } from './lib/hedge';
 export { calculateFreeBetLayStake } from './lib/free-bet';
 export type { FreeBetLayResult } from './lib/free-bet';
 
+// Promo mechanics: profit boosts, risk-free bets, acca insurance
+export { applyProfitBoost } from './lib/profit-boost';
+export type { ProfitBoostInput, ProfitBoostResult } from './lib/profit-boost';
+export { calculateRiskFreeBetLayStake } from './lib/risk-free-bet';
+export type { RiskFreeBetInput, RiskFreeBetResult } from './lib/risk-free-bet';
+export { calculateAccaInsuranceExpectedValue } from './lib/acca-insurance';
+export type { AccaInsuranceResult } from './lib/acca-insurance';
+
 // Combinatorics
 export { generateCombinations } from './lib/combinations';
 export { countFullCoverLines, getFullCoverLines } from './lib/system-bets';

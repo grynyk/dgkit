@@ -6,11 +6,12 @@ Pure, exact-rational sports-betting math: odds format conversion, market
 analysis (implied probability, overround, de-vigged fair odds), arbitrage
 (surebet) detection and stake-splitting, expected value and Kelly criterion
 staking (single-bet and parlay), hedging (green-up, both plain and exchange
-back-to-lay) and matched-betting free-bet extraction, system bet
-combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse,
-each-way settlement, Asian handicap quarter-line splitting, cash-out
-estimates, and iGaming affiliate commission economics (CPA, RevShare,
-hybrid, negative carryover).
+back-to-lay), matched-betting free-bet extraction, promo mechanics (profit
+boosts, risk-free bets, acca insurance), system bet combinatorics, dead
+heat reduction, Rule 4 deductions, void-leg collapse, each-way settlement,
+Asian handicap quarter-line splitting, cash-out estimates, and iGaming
+affiliate commission economics (CPA, RevShare, hybrid, negative
+carryover).
 
 - ✅ **Exact rational arithmetic** — every calculation happens in an internal
   `Fraction` (`bigint` ratio) type, never floating point, so a chain of
@@ -219,6 +220,62 @@ solves for the lay stake that extracts a guaranteed cash profit either way;
 `extractionRate` (`guaranteedProfit / freeBetStake`) is the headline
 metric bettors compare across offers.
 
+### Promo mechanics: profit boosts, risk-free bets, acca insurance
+
+```ts
+import {
+  applyProfitBoost,
+  calculateRiskFreeBetLayStake,
+  calculateAccaInsuranceExpectedValue,
+  fraction,
+  ZERO,
+} from '@dgkit/betting-math';
+
+// A 50% profit-boost token on a $10 bet at odds of 3.
+applyProfitBoost({
+  stake: fraction(10, 1),
+  decimalOdds: fraction(3, 1),
+  boostPercent: fraction(1, 2),
+});
+// baseWinnings 20, boostAmount 10, boostedPayout 40, boostedOdds 4
+
+// $100 backed at evens, refunded in full as an 80%-extraction free bet if it loses.
+calculateRiskFreeBetLayStake({
+  backStake: fraction(100, 1),
+  backOdds: fraction(2, 1),
+  layOdds: fraction(2, 1),
+  commission: ZERO,
+  refundCap: fraction(100, 1),
+  refundBackOdds: fraction(5, 1),
+  refundLayOdds: fraction(5, 1),
+  refundCommission: ZERO,
+});
+// refundValue 80, layStake 60, guaranteedProfit 40 — vs. $100 laid for $0 profit with no promo
+
+// A three-leg accumulator insured against exactly one leg losing.
+const leg = { trueProbability: fraction(3, 5), decimalOdds: fraction(2, 1) };
+calculateAccaInsuranceExpectedValue(
+  [leg, leg, leg],
+  fraction(100, 1),
+  1,
+  fraction(80, 1),
+);
+// insuranceProbability 54/125, expectedValue 2684/25 (107.36)
+```
+
+`applyProfitBoost` increases a bet's winnings (not stake return) by a
+percent, with an optional cap on the extra amount added. Both
+`calculateRiskFreeBetLayStake` and `calculateAccaInsuranceExpectedValue`
+lean on `calculateExchangeLayStake`/`calculateFreeBetLayStake` rather than
+re-deriving their algebra: a risk-free bet is an exchange-lay qualifying
+bet where losing pays a free-bet refund instead of nothing (so less needs
+to be laid to equalize — it reduces exactly to `calculateExchangeLayStake`
+at `refundCap = 0`), and acca insurance's `insuranceProbability` is the sum,
+over `generateCombinations`, of every way exactly `k` legs could lose for
+`k` from `1` to the insured threshold. Neither computes the refund's cash
+value itself — pass `stake` for a cash refund, or
+`calculateFreeBetLayStake(...).guaranteedProfit` for a free-bet-credit one.
+
 ### System bet settlement
 
 ```ts
@@ -304,6 +361,9 @@ Here's what the common UK/Irish bookmaker names mean in those terms:
 | `parlay.ts`         | `combineParlayLegs`, `calculateParlayExpectedValue`, `calculateParlayKellyStake`                                                                                         |
 | `hedge.ts`          | `calculateHedgeStake`, `calculateExchangeLayStake`                                                                                                                       |
 | `free-bet.ts`       | `calculateFreeBetLayStake`                                                                                                                                               |
+| `profit-boost.ts`   | `applyProfitBoost`                                                                                                                                                       |
+| `risk-free-bet.ts`  | `calculateRiskFreeBetLayStake`                                                                                                                                           |
+| `acca-insurance.ts` | `calculateAccaInsuranceExpectedValue`                                                                                                                                    |
 | `combinations.ts`   | `generateCombinations` — generic `C(n, k)`                                                                                                                               |
 | `system-bets.ts`    | `getFullCoverLines`, `countFullCoverLines` — no named presets, see Recipes above                                                                                         |
 | `dead-heat.ts`      | `reduceDeadHeatOdds`                                                                                                                                                     |
