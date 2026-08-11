@@ -8,6 +8,7 @@ import { BettingMathFreeBetDemo } from './demos/betting-math-free-bet-demo';
 import { BettingMathHedgeDemo } from './demos/betting-math-hedge-demo';
 import { BettingMathKellyDemo } from './demos/betting-math-kelly-demo';
 import { BettingMathMarketDemo } from './demos/betting-math-market-demo';
+import { BettingMathParlayDemo } from './demos/betting-math-parlay-demo';
 import { ClipboardDemo } from './demos/clipboard-demo';
 import { BlobSaverDemo } from './demos/blob-saver-demo';
 import { ComboboxDemo } from './demos/combobox-demo';
@@ -44,6 +45,7 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
     BettingMathAffiliateDemo,
     BettingMathEvDemo,
     BettingMathKellyDemo,
+    BettingMathParlayDemo,
     BettingMathHedgeDemo,
     BettingMathFreeBetDemo,
   ],
@@ -65,6 +67,7 @@ import { SignalStorageDemo } from './demos/signal-storage-demo';
       <dg-betting-math-affiliate-demo />
       <dg-betting-math-ev-demo />
       <dg-betting-math-kelly-demo />
+      <dg-betting-math-parlay-demo />
       <dg-betting-math-hedge-demo />
       <dg-betting-math-free-bet-demo />
     </div>

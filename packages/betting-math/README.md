@@ -5,11 +5,12 @@
 Pure, exact-rational sports-betting math: odds format conversion, market
 analysis (implied probability, overround, de-vigged fair odds), arbitrage
 (surebet) detection and stake-splitting, expected value and Kelly criterion
-staking, hedging (green-up, both plain and exchange back-to-lay) and
-matched-betting free-bet extraction, system bet combinatorics, dead heat
-reduction, Rule 4 deductions, void-leg collapse, each-way settlement, Asian
-handicap quarter-line splitting, cash-out estimates, and iGaming affiliate
-commission economics (CPA, RevShare, hybrid, negative carryover).
+staking (single-bet and parlay), hedging (green-up, both plain and exchange
+back-to-lay) and matched-betting free-bet extraction, system bet
+combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse,
+each-way settlement, Asian handicap quarter-line splitting, cash-out
+estimates, and iGaming affiliate commission economics (CPA, RevShare,
+hybrid, negative carryover).
 
 - ✅ **Exact rational arithmetic** — every calculation happens in an internal
   `Fraction` (`bigint` ratio) type, never floating point, so a chain of
@@ -137,6 +138,37 @@ the same edge to size a bankroll-fraction stake (`f* = edge / (decimalOdds
 staking; the recommended stake is clamped to `[0, bankroll]`, but the
 underlying `fullKellyFraction`/`appliedFraction` stay signed so a negative
 edge is visible rather than silently zeroed out.
+
+### Parlay (accumulator) expected value and Kelly staking
+
+```ts
+import {
+  calculateParlayExpectedValue,
+  calculateParlayKellyStake,
+  fraction,
+} from '@dgkit/betting-math';
+
+// Three legs, each a genuine 20% edge (60% true chance at odds of 2).
+const leg = { trueProbability: fraction(3, 5), decimalOdds: fraction(2, 1) };
+const treble = [leg, leg, leg];
+
+calculateParlayExpectedValue(treble, fraction(100, 1));
+// price { probability: 27/125, odds: 8 }, edge 91/125 (72.8%), expectedValue 72.8
+
+calculateParlayKellyStake(treble, fraction(1_000, 1));
+// price { probability: 27/125, odds: 8 }, fullKellyFraction 13/125 (10.4%), recommendedStake 104
+```
+
+`combineParlayLegs` collapses a parlay to a single equivalent probability
+and price (the product of every leg's `trueProbability`, and of every leg's
+`decimalOdds`) — the same "multiply the odds across legs" the settlement
+engine already does. `calculateParlayExpectedValue`/`calculateParlayKellyStake`
+then delegate straight to the single-bet functions above on that combined
+price. **This assumes independence** between legs — same-game legs are
+typically correlated, and this package does no correlation modeling; supply
+a correlation-adjusted `trueProbability` per leg yourself if you have one. A
+real edge compounds multiplicatively across legs, not additively, which is
+why three legs at a 20% edge each compound to a 72.8% parlay edge above.
 
 ### Hedging (green-up)
 
@@ -269,6 +301,7 @@ Here's what the common UK/Irish bookmaker names mean in those terms:
 | `arbitrage.ts`      | `detectArbitrage`, `calculateArbitrageStakes`                                                                                                                            |
 | `expected-value.ts` | `calculateEdge`, `calculateExpectedValue`                                                                                                                                |
 | `kelly.ts`          | `calculateKellyStake`                                                                                                                                                    |
+| `parlay.ts`         | `combineParlayLegs`, `calculateParlayExpectedValue`, `calculateParlayKellyStake`                                                                                         |
 | `hedge.ts`          | `calculateHedgeStake`, `calculateExchangeLayStake`                                                                                                                       |
 | `free-bet.ts`       | `calculateFreeBetLayStake`                                                                                                                                               |
 | `combinations.ts`   | `generateCombinations` — generic `C(n, k)`                                                                                                                               |

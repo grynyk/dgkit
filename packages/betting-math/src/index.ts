@@ -48,6 +48,19 @@ export type { ExpectedValueResult } from './lib/expected-value';
 export { calculateKellyStake } from './lib/kelly';
 export type { KellyResult } from './lib/kelly';
 
+// Parlay (accumulator) expected value and Kelly staking
+export {
+  calculateParlayExpectedValue,
+  calculateParlayKellyStake,
+  combineParlayLegs,
+} from './lib/parlay';
+export type {
+  ParlayExpectedValueResult,
+  ParlayKellyResult,
+  ParlayLeg,
+  ParlayPrice,
+} from './lib/parlay';
+
 // Hedging / green-up (cash back-to-back, and exchange back-to-lay with commission)
 export { calculateExchangeLayStake, calculateHedgeStake } from './lib/hedge';
 export type { ExchangeLayResult, HedgeResult } from './lib/hedge';
