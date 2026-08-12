@@ -1,16 +1,17 @@
 import {
   addFractions,
-  compareFractions,
   divideFractions,
-  fractionToString,
   minFraction,
   multiplyFractions,
   ONE,
   subtractFractions,
-  ZERO,
   type Fraction,
 } from './fraction';
-import { requireDecimalOdds, requirePositiveFraction } from './lay-stake.utils';
+import {
+  requireDecimalOdds,
+  requireNonNegative,
+  requirePositiveFraction,
+} from './lay-stake.utils';
 
 /**
  * Profit boost — a bookmaker token that increases a bet's *winnings* by a
@@ -22,18 +23,6 @@ import { requireDecimalOdds, requirePositiveFraction } from './lay-stake.utils';
  * capping `boostedOdds` itself, just expressed in currency instead of a
  * price.
  */
-
-function requireNonNegative(
-  value: Fraction,
-  name: string,
-  context: string,
-): void {
-  if (compareFractions(value, ZERO) < 0) {
-    throw new RangeError(
-      `${context}: ${name} must be >= 0, got ${fractionToString(value)}.`,
-    );
-  }
-}
 
 /** Input to {@link applyProfitBoost}. */
 export interface ProfitBoostInput {

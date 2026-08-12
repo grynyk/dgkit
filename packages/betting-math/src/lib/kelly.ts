@@ -2,7 +2,6 @@ import { calculateEdge } from './expected-value';
 import {
   compareFractions,
   divideFractions,
-  fractionToString,
   maxFraction,
   minFraction,
   multiplyFractions,
@@ -11,6 +10,10 @@ import {
   ZERO,
   type Fraction,
 } from './fraction';
+import {
+  requirePositiveFraction,
+  requireTrueProbability,
+} from './lay-stake.utils';
 
 /**
  * Kelly criterion staking — the bankroll fraction that maximizes long-run
@@ -72,10 +75,13 @@ export interface KellyResult {
  * field clamped to `[0, bankroll]`, since "stake a negative amount" or
  * "stake more than the bankroll" aren't actions a caller can take.
  *
- * `calculateEdge`'s own validation covers `fairProbability` and
- * `decimalOdds`. Also throws if `bankroll` or `kellyFraction` isn't
- * positive — because `decimalOdds > 1` is guaranteed, `decimalOdds − 1` is
- * always `> 0`, so no separate divide-by-zero guard is needed for it.
+ * Throws if `fairProbability` isn't in `(0, 1]`, `decimalOdds` isn't
+ * greater than `1` (validated a second time inside `calculateEdge`, so
+ * error messages consistently name `fairProbability` rather than
+ * `calculateEdge`'s own `trueProbability` parameter), or `bankroll`/
+ * `kellyFraction` isn't positive — because `decimalOdds > 1` is guaranteed,
+ * `decimalOdds − 1` is always `> 0`, so no separate divide-by-zero guard is
+ * needed for it.
  */
 export function calculateKellyStake(
   fairProbability: Fraction,
@@ -83,17 +89,18 @@ export function calculateKellyStake(
   bankroll: Fraction,
   kellyFraction: Fraction = ONE,
 ): KellyResult {
+  requireTrueProbability(
+    fairProbability,
+    'fairProbability',
+    'calculateKellyStake',
+  );
   const edge = calculateEdge(fairProbability, decimalOdds);
-  if (compareFractions(bankroll, ZERO) <= 0) {
-    throw new RangeError(
-      `calculateKellyStake: bankroll must be > 0, got ${fractionToString(bankroll)}.`,
-    );
-  }
-  if (compareFractions(kellyFraction, ZERO) <= 0) {
-    throw new RangeError(
-      `calculateKellyStake: kellyFraction must be > 0, got ${fractionToString(kellyFraction)}.`,
-    );
-  }
+  requirePositiveFraction(bankroll, 'bankroll', 'calculateKellyStake');
+  requirePositiveFraction(
+    kellyFraction,
+    'kellyFraction',
+    'calculateKellyStake',
+  );
 
   const netOdds = subtractFractions(decimalOdds, ONE);
   const fullKellyFraction = divideFractions(edge, netOdds);

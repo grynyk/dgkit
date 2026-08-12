@@ -2,15 +2,9 @@ import {
   calculateExpectedValue,
   type ExpectedValueResult,
 } from './expected-value';
-import {
-  compareFractions,
-  fractionToString,
-  multiplyFractions,
-  ONE,
-  ZERO,
-  type Fraction,
-} from './fraction';
+import { multiplyFractions, ONE, type Fraction } from './fraction';
 import { calculateKellyStake, type KellyResult } from './kelly';
+import { requireDecimalOdds, requireTrueProbability } from './lay-stake.utils';
 
 /**
  * Parlay (accumulator) expected value and Kelly staking — the same
@@ -47,19 +41,16 @@ export interface ParlayPrice {
 }
 
 function validateLeg(leg: ParlayLeg, index: number): void {
-  if (
-    compareFractions(leg.trueProbability, ZERO) <= 0 ||
-    compareFractions(leg.trueProbability, ONE) > 0
-  ) {
-    throw new RangeError(
-      `combineParlayLegs: leg ${index}'s trueProbability must be in (0, 1], got ${fractionToString(leg.trueProbability)}.`,
-    );
-  }
-  if (compareFractions(leg.decimalOdds, ONE) <= 0) {
-    throw new RangeError(
-      `combineParlayLegs: leg ${index}'s decimalOdds must be greater than 1, got ${fractionToString(leg.decimalOdds)}.`,
-    );
-  }
+  requireTrueProbability(
+    leg.trueProbability,
+    `leg ${index}'s trueProbability`,
+    'combineParlayLegs',
+  );
+  requireDecimalOdds(
+    leg.decimalOdds,
+    `leg ${index}'s decimalOdds`,
+    'combineParlayLegs',
+  );
 }
 
 /**

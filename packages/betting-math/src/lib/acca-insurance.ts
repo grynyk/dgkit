@@ -1,4 +1,3 @@
-import { generateCombinations } from './combinations';
 import {
   addFractions,
   multiplyFractions,
@@ -7,6 +6,7 @@ import {
   ZERO,
   type Fraction,
 } from './fraction';
+import { requireNonNegative } from './lay-stake.utils';
 import {
   calculateParlayExpectedValue,
   type ParlayLeg,
@@ -19,9 +19,9 @@ import {
  * number of legs let a parlay down, rather than requiring every leg to
  * win.
  *
- * Computes each loss-count's exact probability via
- * {@link generateCombinations} (`combinations.ts`) over which legs could be
- * the losers, assuming independence — the same assumption `parlay.ts`
+ * Computes each loss-count's exact probability via the standard
+ * Poisson-binomial recurrence (independent, non-identically-distributed
+ * Bernoulli trials) — the same independence assumption `parlay.ts`
  * documents; correlated legs aren't modeled.
  *
  * The refund's cash value is always a caller-supplied `refundValue`, not
@@ -31,28 +31,45 @@ import {
  * what a stake-not-returned free bet is worth in cash.
  */
 
-function probabilityOfExactlyKLosses(
+/**
+ * `distribution[j]` is the probability that exactly `j` of `legs` lose,
+ * for `j` in `[0, maxLosses]` — truncated there because insurance only
+ * ever cares about loss counts up to `maxInsuredLosses`.
+ *
+ * Standard Poisson-binomial recurrence, processing one leg at a time:
+ * `P(j losses among the first i legs) = P(j | i−1)×winProbability_i +
+ * P(j−1 | i−1)×loseProbability_i`. Truncating each step's array at
+ * `maxLosses + 1` entries keeps this `O(legs.length × maxLosses)` instead
+ * of enumerating all `2^legs.length` loss combinations — the truncated
+ * entries are never read back, so dropping them doesn't change any
+ * `distribution[j]` for `j <= maxLosses`.
+ *
+ * `width <= distribution.length + 1` always, so `distribution[j - 1]` (`j`
+ * ranging up to `width - 1`) is always in bounds; only `distribution[j]`
+ * itself can run one past the previous step's array, at the still-growing
+ * boundary `j === distribution.length`.
+ */
+function lossProbabilityDistribution(
   legs: readonly ParlayLeg[],
-  k: number,
-): Fraction {
-  const losingCombinations = generateCombinations(
-    legs.map((_, index) => index),
-    k,
-  );
-  return losingCombinations.reduce((sum, losingIndices) => {
-    const losingSet = new Set(losingIndices);
-    const combinationProbability = legs.reduce(
-      (product, leg, index) =>
-        multiplyFractions(
-          product,
-          losingSet.has(index)
-            ? subtractFractions(ONE, leg.trueProbability)
-            : leg.trueProbability,
-        ),
-      ONE,
-    );
-    return addFractions(sum, combinationProbability);
-  }, ZERO);
+  maxLosses: number,
+): readonly Fraction[] {
+  let distribution: readonly Fraction[] = [ONE];
+  for (const leg of legs) {
+    const loseProbability = subtractFractions(ONE, leg.trueProbability);
+    const width = Math.min(distribution.length + 1, maxLosses + 1);
+    const next: Fraction[] = [];
+    for (let j = 0; j < width; j += 1) {
+      const staysWinning = multiplyFractions(
+        distribution[j] ?? ZERO,
+        leg.trueProbability,
+      );
+      const newlyLosing =
+        j > 0 ? multiplyFractions(distribution[j - 1], loseProbability) : ZERO;
+      next.push(addFractions(staysWinning, newlyLosing));
+    }
+    distribution = next;
+  }
+  return distribution;
 }
 
 /** The result of {@link calculateAccaInsuranceExpectedValue}. */
@@ -89,8 +106,8 @@ export interface AccaInsuranceResult {
  * `insuranceProbability` is `0`.
  *
  * Throws under the same conditions as `combineParlayLegs`, plus if `stake`
- * isn't positive, or `maxInsuredLosses` isn't an integer in
- * `[0, legs.length)`.
+ * isn't positive, `maxInsuredLosses` isn't an integer in `[0, legs.length)`,
+ * or `refundValue` is negative.
  */
 export function calculateAccaInsuranceExpectedValue(
   legs: readonly ParlayLeg[],
@@ -98,7 +115,6 @@ export function calculateAccaInsuranceExpectedValue(
   maxInsuredLosses: number,
   refundValue: Fraction,
 ): AccaInsuranceResult {
-  const parlayEv = calculateParlayExpectedValue(legs, stake);
   if (
     !Number.isInteger(maxInsuredLosses) ||
     maxInsuredLosses < 0 ||
@@ -108,13 +124,21 @@ export function calculateAccaInsuranceExpectedValue(
       `calculateAccaInsuranceExpectedValue: maxInsuredLosses must be an integer in [0, ${legs.length}), got ${maxInsuredLosses}.`,
     );
   }
+  requireNonNegative(
+    refundValue,
+    'refundValue',
+    'calculateAccaInsuranceExpectedValue',
+  );
 
+  const parlayEv = calculateParlayExpectedValue(legs, stake);
+
+  // maxInsuredLosses < legs.length (checked above), so the distribution's
+  // length is exactly maxInsuredLosses + 1 — every distribution[k] below is
+  // in bounds.
+  const distribution = lossProbabilityDistribution(legs, maxInsuredLosses);
   let insuranceProbability = ZERO;
   for (let k = 1; k <= maxInsuredLosses; k += 1) {
-    insuranceProbability = addFractions(
-      insuranceProbability,
-      probabilityOfExactlyKLosses(legs, k),
-    );
+    insuranceProbability = addFractions(insuranceProbability, distribution[k]);
   }
 
   return {

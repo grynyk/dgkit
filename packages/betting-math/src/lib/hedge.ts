@@ -3,10 +3,10 @@ import {
   divideFractions,
   multiplyFractions,
   subtractFractions,
-  ONE,
   type Fraction,
 } from './fraction';
 import {
+  calculateLayLiability,
   requireCommission,
   requireDecimalOdds,
   requirePositiveFraction,
@@ -135,7 +135,7 @@ export function calculateExchangeLayStake(
 
   return {
     layStake,
-    liability: multiplyFractions(layStake, subtractFractions(layOdds, ONE)),
+    liability: calculateLayLiability(layStake, layOdds),
     guaranteedProfit,
   };
 }

@@ -5,14 +5,15 @@ import {
   fractionToString,
   minFraction,
   multiplyFractions,
-  ONE,
   subtractFractions,
   ZERO,
   type Fraction,
 } from './fraction';
 import {
+  calculateLayLiability,
   requireCommission,
   requireDecimalOdds,
+  requireNonNegative,
   requirePositiveFraction,
 } from './lay-stake.utils';
 
@@ -89,10 +90,12 @@ export interface RiskFreeBetResult {
  * `L = (backStake × backOdds − refundValue) / (layOdds − commission)` — the
  * same numerator as `calculateExchangeLayStake`'s, minus `refundValue`.
  *
- * Throws if `backStake` isn't positive, `backOdds`/`layOdds` isn't greater
- * than `1`, `commission` isn't in `[0, 1)`, or `refundCap` is negative.
- * `refundBackOdds`/`refundLayOdds`/`refundCommission` are only validated
- * (by `calculateFreeBetLayStake`) when `refundAmount` is positive.
+ * Throws if `backStake` isn't positive, `backOdds`/`layOdds`/`refundBackOdds`/
+ * `refundLayOdds` isn't greater than `1`, `commission`/`refundCommission`
+ * isn't in `[0, 1)`, `refundCap` is negative, or the refund market is so
+ * much more favorable than the qualifying bet's own odds that `refundValue`
+ * would reach or exceed `backStake × backOdds` — at that point no positive
+ * lay stake can equalize the outcomes.
  */
 export function calculateRiskFreeBetLayStake(
   input: RiskFreeBetInput,
@@ -115,11 +118,18 @@ export function calculateRiskFreeBetLayStake(
   requireDecimalOdds(backOdds, 'backOdds', 'calculateRiskFreeBetLayStake');
   requireDecimalOdds(layOdds, 'layOdds', 'calculateRiskFreeBetLayStake');
   requireCommission(commission, 'calculateRiskFreeBetLayStake');
-  if (compareFractions(refundCap, ZERO) < 0) {
-    throw new RangeError(
-      `calculateRiskFreeBetLayStake: refundCap must be >= 0, got ${fractionToString(refundCap)}.`,
-    );
-  }
+  requireNonNegative(refundCap, 'refundCap', 'calculateRiskFreeBetLayStake');
+  requireDecimalOdds(
+    refundBackOdds,
+    'refundBackOdds',
+    'calculateRiskFreeBetLayStake',
+  );
+  requireDecimalOdds(
+    refundLayOdds,
+    'refundLayOdds',
+    'calculateRiskFreeBetLayStake',
+  );
+  requireCommission(refundCommission, 'calculateRiskFreeBetLayStake');
 
   const refundAmount = minFraction(backStake, refundCap);
   const refundValue =
@@ -132,18 +142,26 @@ export function calculateRiskFreeBetLayStake(
         ).guaranteedProfit
       : ZERO;
 
+  const backReturn = multiplyFractions(backStake, backOdds);
+  if (compareFractions(backReturn, refundValue) <= 0) {
+    throw new RangeError(
+      `calculateRiskFreeBetLayStake: refundValue (${fractionToString(refundValue)}) must be less than backStake × backOdds (${fractionToString(backReturn)}) — the refund market is too favorable relative to the qualifying bet's own odds for any positive lay stake to equalize the outcomes.`,
+    );
+  }
+
   const layStake = divideFractions(
-    subtractFractions(multiplyFractions(backStake, backOdds), refundValue),
+    subtractFractions(backReturn, refundValue),
     subtractFractions(layOdds, commission),
   );
+  const liability = calculateLayLiability(layStake, layOdds);
   const guaranteedProfit = subtractFractions(
-    multiplyFractions(backStake, subtractFractions(backOdds, ONE)),
-    multiplyFractions(layStake, subtractFractions(layOdds, ONE)),
+    subtractFractions(backReturn, backStake),
+    liability,
   );
 
   return {
     layStake,
-    liability: multiplyFractions(layStake, subtractFractions(layOdds, ONE)),
+    liability,
     refundAmount,
     refundValue,
     guaranteedProfit,

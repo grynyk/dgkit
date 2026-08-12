@@ -1,12 +1,14 @@
 import {
-  compareFractions,
-  fractionToString,
   multiplyFractions,
-  ONE,
   subtractFractions,
-  ZERO,
+  ONE,
   type Fraction,
 } from './fraction';
+import {
+  requireDecimalOdds,
+  requirePositiveFraction,
+  requireTrueProbability,
+} from './lay-stake.utils';
 import { impliedProbability } from './market';
 
 /**
@@ -23,25 +25,6 @@ import { impliedProbability } from './market';
  * {@link calculateArbitrageStakes}, which is guaranteed regardless of
  * `trueProbability`).
  */
-
-function requireTrueProbability(probability: Fraction, context: string): void {
-  if (
-    compareFractions(probability, ZERO) <= 0 ||
-    compareFractions(probability, ONE) > 0
-  ) {
-    throw new RangeError(
-      `${context}: trueProbability must be in (0, 1], got ${fractionToString(probability)}.`,
-    );
-  }
-}
-
-function requireDecimalOdds(odds: Fraction, context: string): void {
-  if (compareFractions(odds, ONE) <= 0) {
-    throw new RangeError(
-      `${context}: decimalOdds must be greater than 1, got ${fractionToString(odds)}.`,
-    );
-  }
-}
 
 /**
  * The edge of a single bet, per unit staked.
@@ -60,8 +43,8 @@ export function calculateEdge(
   trueProbability: Fraction,
   decimalOdds: Fraction,
 ): Fraction {
-  requireTrueProbability(trueProbability, 'calculateEdge');
-  requireDecimalOdds(decimalOdds, 'calculateEdge');
+  requireTrueProbability(trueProbability, 'trueProbability', 'calculateEdge');
+  requireDecimalOdds(decimalOdds, 'decimalOdds', 'calculateEdge');
   return subtractFractions(
     multiplyFractions(trueProbability, decimalOdds),
     ONE,
@@ -97,11 +80,7 @@ export function calculateExpectedValue(
   stake: Fraction,
 ): ExpectedValueResult {
   const edge = calculateEdge(trueProbability, decimalOdds);
-  if (compareFractions(stake, ZERO) <= 0) {
-    throw new RangeError(
-      `calculateExpectedValue: stake must be > 0, got ${fractionToString(stake)}.`,
-    );
-  }
+  requirePositiveFraction(stake, 'stake', 'calculateExpectedValue');
   return {
     stake,
     expectedValue: multiplyFractions(stake, edge),

@@ -100,6 +100,35 @@ describe('calculateAccaInsuranceExpectedValue', () => {
     ).toThrow(RangeError);
   });
 
+  it('rejects a negative refundValue', () => {
+    expect(() =>
+      calculateAccaInsuranceExpectedValue(
+        treble,
+        fraction(100, 1),
+        1,
+        fraction(-1, 1),
+      ),
+    ).toThrow(RangeError);
+  });
+
+  it('stays fast for a large accumulator (no combinatorial blowup)', () => {
+    const bigLeg: ParlayLeg = {
+      trueProbability: fraction(9, 10),
+      decimalOdds: fraction(11, 10),
+    };
+    const legs = Array.from({ length: 25 }, () => bigLeg);
+
+    const result = calculateAccaInsuranceExpectedValue(
+      legs,
+      fraction(100, 1),
+      24,
+      fraction(80, 1),
+    );
+
+    expect(compareFractions(result.insuranceProbability, ZERO)).toBe(1);
+    expect(compareFractions(result.insuranceProbability, ONE)).toBe(-1);
+  });
+
   /** Probability in (0, 1], generated from a bounded integer pair. */
   const probabilityArb: fc.Arbitrary<Fraction> = fc
     .tuple(fc.integer({ min: 1, max: 20 }), fc.integer({ min: 1, max: 20 }))

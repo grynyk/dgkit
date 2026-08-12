@@ -52,6 +52,38 @@ export function requireCommission(value: Fraction, context: string): void {
   }
 }
 
+export function requireNonNegative(
+  value: Fraction,
+  name: string,
+  context: string,
+): void {
+  if (compareFractions(value, ZERO) < 0) {
+    throw new RangeError(
+      `${context}: ${name} must be >= 0, got ${fractionToString(value)}.`,
+    );
+  }
+}
+
+export function requireTrueProbability(
+  value: Fraction,
+  name: string,
+  context: string,
+): void {
+  if (compareFractions(value, ZERO) <= 0 || compareFractions(value, ONE) > 0) {
+    throw new RangeError(
+      `${context}: ${name} must be in (0, 1], got ${fractionToString(value)}.`,
+    );
+  }
+}
+
+/** `layStake × (layOdds − 1)` — the exchange balance needed to cover a lay bet if it loses. */
+export function calculateLayLiability(
+  layStake: Fraction,
+  layOdds: Fraction,
+): Fraction {
+  return multiplyFractions(layStake, subtractFractions(layOdds, ONE));
+}
+
 export interface EqualizingLayStakeResult {
   readonly layStake: Fraction;
   /** The same regardless of which side wins. */

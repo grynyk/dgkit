@@ -1,6 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 
+import { calculateFreeBetLayStake } from './free-bet';
 import { calculateExchangeLayStake } from './hedge';
 import {
   addFractions,
@@ -97,6 +98,48 @@ describe('calculateRiskFreeBetLayStake', () => {
     ).toThrow(RangeError);
   });
 
+  it('rejects invalid refund odds/commission even when refundCap is 0', () => {
+    expect(() =>
+      calculateRiskFreeBetLayStake({
+        ...baseInput,
+        refundCap: ZERO,
+        refundBackOdds: ONE,
+      }),
+    ).toThrow(RangeError);
+    expect(() =>
+      calculateRiskFreeBetLayStake({
+        ...baseInput,
+        refundCap: ZERO,
+        refundLayOdds: ONE,
+      }),
+    ).toThrow(RangeError);
+    expect(() =>
+      calculateRiskFreeBetLayStake({
+        ...baseInput,
+        refundCap: ZERO,
+        refundCommission: ONE,
+      }),
+    ).toThrow(RangeError);
+  });
+
+  it('throws when the refund market is so favorable that refundValue would reach or exceed backStake × backOdds', () => {
+    // A heavy-favorite qualifier (odds 1.1) paired with a refund re-backed
+    // at much longer odds (20) extracts more value than the qualifying bet
+    // itself returns — no positive lay stake can equalize that.
+    expect(() =>
+      calculateRiskFreeBetLayStake({
+        backStake: fraction(100, 1),
+        backOdds: fraction(11, 10),
+        layOdds: fraction(11, 10),
+        commission: ZERO,
+        refundCap: fraction(100, 1),
+        refundBackOdds: fraction(20, 1),
+        refundLayOdds: fraction(21, 20),
+        refundCommission: ZERO,
+      }),
+    ).toThrow(RangeError);
+  });
+
   /** Odds strictly greater than 1, generated from a bounded integer pair. */
   const oddsArb: fc.Arbitrary<Fraction> = fc
     .tuple(fc.integer({ min: 1, max: 5_000 }), fc.integer({ min: 1, max: 500 }))
@@ -137,12 +180,35 @@ describe('calculateRiskFreeBetLayStake', () => {
           refundLayOdds,
           refundCommission,
         ) => {
+          const refundCap = multiplyFractions(backStake, refundCapFraction);
+          const refundAmount =
+            compareFractions(refundCap, backStake) < 0 ? refundCap : backStake;
+          const refundValue =
+            compareFractions(refundAmount, ZERO) > 0
+              ? calculateFreeBetLayStake(
+                  refundAmount,
+                  refundBackOdds,
+                  refundLayOdds,
+                  refundCommission,
+                ).guaranteedProfit
+              : ZERO;
+          // Skip inputs where the refund market is so favorable that
+          // refundValue would reach or exceed backStake × backOdds — those
+          // correctly throw (see risk-free-bet.spec.ts's dedicated test)
+          // rather than returning a nonsensical negative layStake.
+          fc.pre(
+            compareFractions(
+              multiplyFractions(backStake, backOdds),
+              refundValue,
+            ) > 0,
+          );
+
           const result = calculateRiskFreeBetLayStake({
             backStake,
             backOdds,
             layOdds,
             commission,
-            refundCap: multiplyFractions(backStake, refundCapFraction),
+            refundCap,
             refundBackOdds,
             refundLayOdds,
             refundCommission,

@@ -11,9 +11,12 @@ import {
   type Fraction,
 } from './fraction';
 import {
+  calculateLayLiability,
   requireCommission,
   requireDecimalOdds,
+  requireNonNegative,
   requirePositiveFraction,
+  requireTrueProbability,
   solveEqualizingLayStake,
 } from './lay-stake.utils';
 
@@ -61,6 +64,61 @@ describe('requireCommission', () => {
   it('rejects a commission of 1 or more', () => {
     expect(() => requireCommission(fraction(1, 1), 'ctx')).toThrow(RangeError);
     expect(() => requireCommission(fraction(3, 2), 'ctx')).toThrow(RangeError);
+  });
+});
+
+describe('requireNonNegative', () => {
+  it('throws for a negative value', () => {
+    expect(() => requireNonNegative(fraction(-1, 100), 'x', 'ctx')).toThrow(
+      RangeError,
+    );
+  });
+
+  it('accepts the boundary of 0', () => {
+    expect(() => requireNonNegative(ZERO, 'x', 'ctx')).not.toThrow();
+  });
+
+  it('does not throw for a positive value', () => {
+    expect(() =>
+      requireNonNegative(fraction(1, 100), 'x', 'ctx'),
+    ).not.toThrow();
+  });
+});
+
+describe('requireTrueProbability', () => {
+  it('throws for zero or negative values', () => {
+    expect(() => requireTrueProbability(ZERO, 'x', 'ctx')).toThrow(RangeError);
+    expect(() => requireTrueProbability(fraction(-1, 2), 'x', 'ctx')).toThrow(
+      RangeError,
+    );
+  });
+
+  it('throws above the upper boundary of 1', () => {
+    expect(() => requireTrueProbability(fraction(3, 2), 'x', 'ctx')).toThrow(
+      RangeError,
+    );
+  });
+
+  it('accepts the boundary of 1', () => {
+    expect(() => requireTrueProbability(ONE, 'x', 'ctx')).not.toThrow();
+  });
+
+  it('does not throw for a value strictly inside (0, 1)', () => {
+    expect(() =>
+      requireTrueProbability(fraction(1, 2), 'x', 'ctx'),
+    ).not.toThrow();
+  });
+});
+
+describe('calculateLayLiability', () => {
+  it('is layStake × (layOdds − 1)', () => {
+    expect(calculateLayLiability(fraction(10, 1), fraction(5, 1))).toEqual(
+      fraction(40, 1),
+    );
+  });
+
+  it('is zero for a zero layStake', () => {
+    expect(calculateLayLiability(ZERO, fraction(5, 1))).toEqual(ZERO);
   });
 });
 
