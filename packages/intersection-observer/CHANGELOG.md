@@ -1,5 +1,11 @@
 # @dgkit/intersection-observer
 
+## 0.1.3
+
+### Patch Changes
+
+- 5763796: Routine maintenance release, no functional changes.
+
 ## 0.1.2
 
 ### Patch Changes

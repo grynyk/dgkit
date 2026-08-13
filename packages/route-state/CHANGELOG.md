@@ -1,5 +1,11 @@
 # @dgkit/route-state
 
+## 0.2.2
+
+### Patch Changes
+
+- 5763796: Routine maintenance release, no functional changes.
+
 ## 0.2.1
 
 ### Patch Changes
