@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/clipboard",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "SSR-safe Angular clipboard helper with signal-based operation state.",
   "author": {
     "name": "Danylo Grynyk",
