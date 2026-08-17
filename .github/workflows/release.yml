@@ -53,7 +53,7 @@ jobs:
       # When changesets are present, open/update the "Version Packages" PR.
       # This only bumps versions on a PR branch; it never publishes.
       - name: Create or update the version PR
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           version: yarn version-packages
           commit: 'chore: version packages'
