@@ -4521,11 +4521,11 @@ __metadata:
   linkType: hard
 
 "fast-check@npm:^4.9.0":
-  version: 4.9.0
-  resolution: "fast-check@npm:4.9.0"
+  version: 4.10.1
+  resolution: "fast-check@npm:4.10.1"
   dependencies:
     pure-rand: "npm:^8.0.0"
-  checksum: 10c0/d31e6cf7b4ef01dc654193ea7c34a894c51b1553b6781f22a50808d5535d825c2ff2adff23a7c2f14d0452c90917bd20a84c1e807d1f8064aa4d984a21e72788
+  checksum: 10c0/bcfd2178471bdcb92c9752dec576982f2498e9d0978899d5388cfa47a3fcdec298354ed8e8030d446be2ef2e73351b3693f892f41b308f8485c93f75d4e41dd5
   languageName: node
   linkType: hard
 
