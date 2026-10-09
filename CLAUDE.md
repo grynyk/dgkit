@@ -13,7 +13,7 @@ tested, versioned and published independently. `apps/playground` is a demo app
 ## Commands
 
 ```bash
-nvm use            # Node from .nvmrc (24.13.0)
+nvm use            # Node from .nvmrc (24.21.0)
 corepack enable    # provisions Yarn 4 (Berry) from packageManager
 yarn install
 ```

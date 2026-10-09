@@ -28,8 +28,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/common": ">=18.0.0 <22.0.0",
-    "@angular/core": ">=18.0.0 <22.0.0",
+    "@angular/common": ">=18.0.0 <23.0.0",
+    "@angular/core": ">=18.0.0 <23.0.0",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "dependencies": {

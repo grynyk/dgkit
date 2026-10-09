@@ -75,7 +75,9 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   target: 'es2022',
   platform: 'neutral',
-  dts: true,
+  // tsup's declaration build hard-codes \`baseUrl: "."\`, which TypeScript 6
+  // rejects as deprecated. Silenced here only; the repo's tsconfigs don't use it.
+  dts: { compilerOptions: { ignoreDeprecations: '6.0' } },
   sourcemap: true,
   treeshake: true,
   splitting: false,

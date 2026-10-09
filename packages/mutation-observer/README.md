@@ -34,7 +34,7 @@ Works with **Angular 18, 19, 20 and 21**.
 
 | Dependency | Supported range      |
 | ---------- | -------------------- |
-| Angular    | `>=18.0.0 <22.0.0`   |
+| Angular    | `>=18.0.0 <23.0.0`   |
 | RxJS       | `^6.5.3` or `^7.4.0` |
 | TypeScript | `>=5.4`              |
 

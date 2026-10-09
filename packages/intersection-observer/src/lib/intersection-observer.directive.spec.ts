@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, type Provider } from '@angular/core';
+import { Component, PLATFORM_ID, type Provider, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -19,18 +19,18 @@ import {
   imports: [IntersectionObserverDirective],
   template: `<div
     dgIntersectionObserver
-    [intersectRootMargin]="rootMargin"
-    [intersectThreshold]="threshold"
-    [intersectOnce]="once"
-    [intersectEmitInitial]="emitInitial"
+    [intersectRootMargin]="rootMargin()"
+    [intersectThreshold]="threshold()"
+    [intersectOnce]="once()"
+    [intersectEmitInitial]="emitInitial()"
     (dgIntersect)="onIntersect($event)"
   ></div>`,
 })
 class HostComponent {
-  rootMargin = '0px';
-  threshold: number | number[] = 0;
-  once = false;
-  emitInitial = false;
+  readonly rootMargin = signal('0px');
+  readonly threshold = signal<number | number[]>(0);
+  readonly once = signal(false);
+  readonly emitInitial = signal(false);
   readonly events: DgIntersectEvent[] = [];
   onIntersect(event: DgIntersectEvent): void {
     this.events.push(event);
@@ -74,10 +74,10 @@ function setup(
   TestBed.configureTestingModule({ imports: [HostComponent], providers });
   const fixture = TestBed.createComponent(HostComponent);
   const host = fixture.componentInstance;
-  host.rootMargin = state.rootMargin ?? '0px';
-  host.threshold = state.threshold ?? 0;
-  host.once = state.once ?? false;
-  host.emitInitial = state.emitInitial ?? false;
+  host.rootMargin.set(state.rootMargin ?? '0px');
+  host.threshold.set(state.threshold ?? 0);
+  host.once.set(state.once ?? false);
+  host.emitInitial.set(state.emitInitial ?? false);
   fixture.detectChanges();
   const element = fixture.nativeElement.querySelector('div') as HTMLElement;
   return { fixture, host, element };
@@ -228,7 +228,7 @@ describe('reactive options', () => {
   it('recreates the observer when rootMargin changes', () => {
     const { fixture, host, element } = setup({ rootMargin: '0px' });
     const first = MockIntersectionObserver.last;
-    host.rootMargin = '300px';
+    host.rootMargin.set('300px');
     fixture.detectChanges();
     const next = MockIntersectionObserver.last;
     expect(next).not.toBe(first);
@@ -240,7 +240,7 @@ describe('reactive options', () => {
   it('recreates the observer when threshold changes', () => {
     const { fixture, host } = setup({ threshold: 0 });
     const first = MockIntersectionObserver.last;
-    host.threshold = 0.5;
+    host.threshold.set(0.5);
     fixture.detectChanges();
     expect(MockIntersectionObserver.last).not.toBe(first);
     expect(MockIntersectionObserver.last.thresholds).toEqual([0.5]);

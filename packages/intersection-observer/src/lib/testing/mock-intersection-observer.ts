@@ -58,6 +58,7 @@ export class MockIntersectionObserver implements IntersectionObserver {
   readonly callback: IntersectionObserverCallback;
   readonly root: Element | Document | null;
   readonly rootMargin: string;
+  readonly scrollMargin: string;
   readonly thresholds: readonly number[];
   readonly observed = new Set<Element>();
   disconnected = false;
@@ -70,6 +71,7 @@ export class MockIntersectionObserver implements IntersectionObserver {
     this.callback = callback;
     this.root = options.root ?? null;
     this.rootMargin = options.rootMargin ?? '0px';
+    this.scrollMargin = options.scrollMargin ?? '0px';
     const t = options.threshold ?? 0;
     this.thresholds = Array.isArray(t) ? t : [t];
     MockIntersectionObserver.instances.push(this);

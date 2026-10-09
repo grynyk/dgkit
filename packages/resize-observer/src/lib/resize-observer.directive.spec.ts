@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, type Provider } from '@angular/core';
+import { Component, PLATFORM_ID, type Provider, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -19,18 +19,18 @@ import {
   imports: [ResizeObserverDirective],
   template: `<div
     dgResizeObserver
-    [resizeDebounce]="debounce"
-    [resizeBox]="box"
-    [resizeEmitInitial]="emitInitial"
-    [resizeDistinct]="distinct"
+    [resizeDebounce]="debounce()"
+    [resizeBox]="box()"
+    [resizeEmitInitial]="emitInitial()"
+    [resizeDistinct]="distinct()"
     (dgResize)="onResize($event)"
   ></div>`,
 })
 class HostComponent {
-  debounce = 0;
-  box: DgResizeBox = 'content-box';
-  emitInitial = false;
-  distinct = false;
+  readonly debounce = signal(0);
+  readonly box = signal<DgResizeBox>('content-box');
+  readonly emitInitial = signal(false);
+  readonly distinct = signal(false);
   readonly events: DgResizeEvent[] = [];
   onResize(event: DgResizeEvent): void {
     this.events.push(event);
@@ -84,10 +84,10 @@ function setup(
   TestBed.configureTestingModule({ imports: [HostComponent], providers });
   const fixture = TestBed.createComponent(HostComponent);
   const host = fixture.componentInstance;
-  host.debounce = state.debounce ?? 0;
-  host.box = state.box ?? 'content-box';
-  host.emitInitial = state.emitInitial ?? false;
-  host.distinct = state.distinct ?? false;
+  host.debounce.set(state.debounce ?? 0);
+  host.box.set(state.box ?? 'content-box');
+  host.emitInitial.set(state.emitInitial ?? false);
+  host.distinct.set(state.distinct ?? false);
   fixture.detectChanges();
   const element = fixture.nativeElement.querySelector('div') as HTMLElement;
   return { fixture, host, element };
@@ -267,7 +267,7 @@ describe('debouncing', () => {
       emitInitial: true,
       debounce: 0,
     });
-    host.debounce = 40;
+    host.debounce.set(40);
     fixture.detectChanges();
     MockResizeObserver.last.emitSize(element, 10, 10);
     expect(host.events).toHaveLength(0);
@@ -316,7 +316,7 @@ describe('distinct behavior', () => {
       box: 'content-box',
     });
     MockResizeObserver.last.emitSize(element, 100, 50);
-    host.box = 'border-box';
+    host.box.set('border-box');
     fixture.detectChanges();
     // Same dimensions under a different box → still treated as a duplicate.
     MockResizeObserver.last.emit([
@@ -417,7 +417,7 @@ describe('input behavior', () => {
   it('re-observes when the box changes at runtime', () => {
     const { fixture, host, element } = setup({ box: 'content-box' });
     const first = MockResizeObserver.last;
-    host.box = 'border-box';
+    host.box.set('border-box');
     fixture.detectChanges();
     const next = MockResizeObserver.last;
     expect(next).not.toBe(first);

@@ -44,7 +44,7 @@ zone.js is loaded.
 
 - **[Nx](https://nx.dev)** — task running, caching and `affected` graph
 - **[Yarn](https://yarnpkg.com)** workspaces
-- **Angular 21** (standalone + signals), **TypeScript 5.9**, **RxJS 7**
+- **Angular 22** (standalone + signals), **TypeScript 6.0**, **RxJS 7**
 - **[ng-packagr](https://github.com/ng-packagr/ng-packagr)** — Angular Package Format builds
 - **Vitest** (+ Analog) — every package tested with enforced coverage thresholds
 - **ESLint** (type-aware) + **Prettier**

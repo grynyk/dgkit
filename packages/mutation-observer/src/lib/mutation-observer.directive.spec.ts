@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, type Provider } from '@angular/core';
+import { Component, PLATFORM_ID, type Provider, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -18,18 +18,18 @@ import {
   imports: [MutationObserverDirective],
   template: `<div
     dgMutationObserver
-    [mutationChildList]="childList"
-    [mutationSubtree]="subtree"
-    [mutationAttributes]="attributes"
-    [mutationDebounce]="debounce"
+    [mutationChildList]="childList()"
+    [mutationSubtree]="subtree()"
+    [mutationAttributes]="attributes()"
+    [mutationDebounce]="debounce()"
     (dgMutation)="onMutation($event)"
   ></div>`,
 })
 class HostComponent {
-  childList = true;
-  subtree = false;
-  attributes = false;
-  debounce = 0;
+  readonly childList = signal(true);
+  readonly subtree = signal(false);
+  readonly attributes = signal(false);
+  readonly debounce = signal(0);
   readonly events: DgMutationEvent[] = [];
   onMutation(event: DgMutationEvent): void {
     this.events.push(event);
@@ -82,10 +82,10 @@ function setup(
   TestBed.configureTestingModule({ imports: [HostComponent], providers });
   const fixture = TestBed.createComponent(HostComponent);
   const host = fixture.componentInstance;
-  host.childList = state.childList ?? true;
-  host.subtree = state.subtree ?? false;
-  host.attributes = state.attributes ?? false;
-  host.debounce = state.debounce ?? 0;
+  host.childList.set(state.childList ?? true);
+  host.subtree.set(state.subtree ?? false);
+  host.attributes.set(state.attributes ?? false);
+  host.debounce.set(state.debounce ?? 0);
   fixture.detectChanges();
   const element = fixture.nativeElement.querySelector('div') as HTMLElement;
   return { fixture, host, element };
@@ -204,7 +204,7 @@ describe('debouncing', () => {
 
   it('reacts to a debounce value changed at runtime', async () => {
     const { fixture, host, element } = setup({ debounce: 0 });
-    host.debounce = 40;
+    host.debounce.set(40);
     fixture.detectChanges();
     MockMutationObserver.last.emitChildList(element);
     expect(host.events).toHaveLength(0);
@@ -240,7 +240,7 @@ describe('input behavior', () => {
   it('re-observes when an input changes at runtime', () => {
     const { fixture, element } = setup({ attributes: false });
     const first = MockMutationObserver.last;
-    fixture.componentInstance.attributes = true;
+    fixture.componentInstance.attributes.set(true);
     fixture.detectChanges();
     const next = MockMutationObserver.last;
     expect(next).not.toBe(first);
