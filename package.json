@@ -46,7 +46,7 @@
     "@changesets/cli": "^2.31.1",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.2",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.0.3",
     "angular-eslint": "^22.5.0",
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
@@ -61,7 +61,7 @@
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^8.1.5",
-    "vitest": "^4.1.10",
+    "vitest": "^5.0.3",
     "zone.js": "~0.16.2"
   }
 }
