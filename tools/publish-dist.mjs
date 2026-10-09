@@ -21,10 +21,33 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const distPackages = join(root, 'dist', 'packages');
+const sourcePackages = join(root, 'packages');
 
 if (!existsSync(distPackages)) {
   console.error(
     `No built packages at ${distPackages}. Run "yarn build" first.`,
+  );
+  process.exit(1);
+}
+
+/**
+ * `dist/` is never cleaned, so renaming or removing a package leaves its last
+ * build behind — and this script publishes whatever directory it finds. A
+ * fresh CI checkout starts empty and is unaffected, but `yarn release` run
+ * locally would push a package that no longer has source. Refuse instead.
+ */
+const orphans = readdirSync(distPackages).filter(
+  (name) =>
+    existsSync(join(distPackages, name, 'package.json')) &&
+    !existsSync(join(sourcePackages, name, 'package.json')),
+);
+
+if (orphans.length > 0) {
+  console.error(
+    `Refusing to publish: dist/packages contains ${orphans.length} directory(ies) with no ` +
+      `matching source package — leftovers from a rename or removal.\n` +
+      orphans.map((n) => `  dist/packages/${n}`).join('\n') +
+      `\n\nDelete them (or "rm -rf dist" and rebuild) and re-run.`,
   );
   process.exit(1);
 }

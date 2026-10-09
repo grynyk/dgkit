@@ -52,13 +52,15 @@ Only run what changed:
 yarn nx affected -t build test lint typecheck
 ```
 
-Scaffold a new package (mirrors the `resize-observer` template — its own
-`package.json`, `project.json`, `ng-package.json`, tsconfigs, Vitest config,
-README, CHANGELOG, wired into the workspace):
+Scaffold a new package — its own `package.json`, `project.json`, tsconfigs,
+Vitest config, README, CHANGELOG, wired into the workspace. Without `--pure`
+it mirrors `resize-observer` (Angular, ng-packagr, Analog test bed); with
+`--pure` it mirrors `betting-math` (framework-free, tsup dual ESM + CJS, plain
+Node Vitest):
 
 ```bash
 yarn new:package media-query "Angular media-query utilities."
-yarn new:package slugify "String slug helpers." --pure   # no Angular peer deps
+yarn new:package slugify "String slug helpers." --pure   # framework-free
 ```
 
 See [tools/create-package.mjs](tools/create-package.mjs) for exactly what gets generated.
@@ -72,12 +74,18 @@ See [tools/create-package.mjs](tools/create-package.mjs) for exactly what gets g
   `clipboard`, `combobox`) depend on `@angular/core`/`@angular/common`/`rxjs`
   as **peer** dependencies (never bundled) and are built with `ng-packagr`.
 - **Pure packages** (`format`, `blob-saver`, `betting-math`) have zero
-  framework dependency, are plain TypeScript, and work anywhere JS runs.
-  `betting-math` is exact-rational (fraction-based) sports-betting math with
-  no floating-point rounding.
+  framework dependency **and zero runtime dependencies**, are plain
+  TypeScript, and work anywhere JS runs. `betting-math` is exact-rational
+  (fraction-based) sports-betting math with no floating-point rounding.
+  They are built by [tools/build-pure-package.mjs](tools/build-pure-package.mjs)
+  (tsup) into **dual ESM + CommonJS** with per-format declarations, because
+  ng-packagr's Angular Package Format is ESM-only and plenty of the Node
+  services these target still `require()`.
 
 `yarn new:package ... --pure` scaffolds the second flavor; omit the flag for
-the first.
+the first. The flag switches the whole package — build target, Vitest config,
+npm keywords, and whether `ng-package.json`/`src/test-setup.ts` are generated
+at all — not just the peer dependencies.
 
 ### Package anatomy
 
@@ -95,9 +103,9 @@ Every package under `packages/<name>/` follows the same shape:
   root [tsconfig.base.json](tsconfig.base.json). The base config's `paths` map
   every `@dgkit/<name>` import straight to that package's `src/index.ts`, so
   other packages and the playground consume source directly, never `dist/`.
-- `vitest.config.ts` — Vitest via the Analog Angular plugin, coverage
-  thresholds enforced per package: **statements 95%, branches 90%, functions
-  95%, lines 95%**.
+- `vitest.config.ts` — Vitest via the Analog Angular plugin for Angular
+  packages, or plain Node Vitest for pure ones; coverage thresholds enforced
+  per package: **statements 95%, branches 90%, functions 95%, lines 95%**.
 
 ### The signal-API + directive pattern
 
@@ -156,9 +164,24 @@ merged, `changeset publish` with npm provenance.
 build job additionally runs `npm pack --dry-run` per package and fails if any
 `*.spec.*`, `test-setup`, or `testing/` file leaks into the packed output.
 
+`dist/` is never cleaned, so renaming or deleting a package leaves a stale,
+still-publishable build behind. `publish-dist.mjs` refuses to run when
+`dist/packages` holds a directory with no matching source package — a fresh CI
+checkout is unaffected, but a local `yarn release` would otherwise republish
+ghosts. If it fires, `rm -rf dist && yarn build`.
+
 ### CI (`.github/workflows/ci.yml`)
 
-Three parallel jobs: `lint` (Prettier check + `nx affected -t lint typecheck`),
+Four jobs: `lint` (Prettier check + `nx affected -t lint typecheck`),
 `test` (`nx affected -t test`), `build` (full `nx run-many -t build` +
-`npm pack --dry-run` validation). Affected-based jobs rely on `nx-set-shas`
-against `main` as the default base ([nx.json](nx.json): `defaultBase: "main"`).
+`npm pack --dry-run` validation), and `smoke` — a Node 18/20/22/24 matrix that
+packs each built package, installs the tarball into a throwaway project, and
+`require()`s and `import`s it for real
+([tools/smoke-test-dist.mjs](tools/smoke-test-dist.mjs)). `npm pack --dry-run`
+only checks what goes _into_ a tarball; `smoke` checks the result actually
+loads, which is what catches a broken or missing `exports` condition. Angular
+packages are skipped there — they need a full Angular runtime, and Angular's
+own Node floor is above the `>=18` the pure packages promise.
+
+Affected-based jobs rely on `nx-set-shas` against `main` as the default base
+([nx.json](nx.json): `defaultBase: "main"`).

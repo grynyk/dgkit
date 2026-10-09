@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/betting-math"],
       "options": {
-        "command": "ng-packagr -p packages/betting-math/ng-package.json -c packages/betting-math/tsconfig.lib.json"
+        "command": "node tools/build-pure-package.mjs betting-math"
       }
     },
     "test": {

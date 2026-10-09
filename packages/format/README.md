@@ -19,7 +19,13 @@ yarn add @dgkit/format
 
 ## Compatibility
 
-> **Framework-agnostic.** `@dgkit/format` has **no Angular — or any framework — dependency**. It is pure TypeScript with zero runtime dependencies, so it works with **any Angular version** (or React, Vue, Svelte, plain Node, a Web Worker… anywhere JavaScript runs).
+> **Framework-agnostic.** `@dgkit/format` has **no Angular — or any
+> framework — dependency**. It is pure TypeScript with zero runtime
+> dependencies, so it works with **any Angular version** (or React, Vue,
+> plain Node… anywhere JavaScript runs).
+
+Ships **both ESM and CommonJS**, so it works whether you `import` it or
+`require()` it, with type declarations for each. **Node 18+.**
 
 ## `middleTruncate`
 

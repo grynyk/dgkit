@@ -7,9 +7,6 @@
     "inlineSources": true,
     "types": []
   },
-  "angularCompilerOptions": {
-    "compilationMode": "partial"
-  },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts", "vitest.config.ts"]
 }

@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/format"],
       "options": {
-        "command": "ng-packagr -p packages/format/ng-package.json -c packages/format/tsconfig.lib.json"
+        "command": "node tools/build-pure-package.mjs format"
       }
     },
     "test": {

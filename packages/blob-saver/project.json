@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/blob-saver"],
       "options": {
-        "command": "ng-packagr -p packages/blob-saver/ng-package.json -c packages/blob-saver/tsconfig.lib.json"
+        "command": "node tools/build-pure-package.mjs blob-saver"
       }
     },
     "test": {

@@ -6,13 +6,20 @@
  *   yarn new:package <kebab-name> "<one-line description>" [--pure]
  *   node tools/create-package.mjs media-query "Angular media-query utilities."
  *
- * Generates a package mirroring @dgkit/resize-observer's structure: its own
- * package.json / project.json / ng-package.json, tsconfigs, Vitest config and
- * setup, a stub source + spec, README and CHANGELOG — wired into the Nx + Yarn
- * workspace and ready for `nx build|test|lint|typecheck`.
+ * Generates a package with its own package.json / project.json, tsconfigs,
+ * Vitest config, a stub source + spec, README and CHANGELOG — wired into the
+ * Nx + Yarn workspace and ready for `nx build|test|lint|typecheck`.
  *
- * `--pure` omits the Angular peer dependencies (for framework-free packages
- * such as @dgkit/format).
+ * Two flavors, and `--pure` switches the whole package between them rather
+ * than just dropping the peer dependencies:
+ *
+ *   default  mirrors @dgkit/resize-observer — Angular peer deps, built by
+ *            ng-packagr into the Angular Package Format, jsdom + Analog test
+ *            bed, ng-package.json and src/test-setup.ts.
+ *   --pure   mirrors @dgkit/betting-math — no framework dependency, no tslib,
+ *            built by tools/build-pure-package.mjs into dual ESM + CommonJS,
+ *            plain Node Vitest, and npm keywords that describe the package
+ *            instead of claiming Angular.
  */
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -39,7 +46,9 @@ if (!/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(name)) {
   process.exit(1);
 }
 
-const description = descParts.join(' ').trim() || `Angular ${name} utilities.`;
+const description =
+  descParts.join(' ').trim() ||
+  (pure ? `Framework-free ${name} utilities.` : `Angular ${name} utilities.`);
 const pascal = name
   .split('-')
   .map((p) => p[0].toUpperCase() + p.slice(1))
@@ -81,13 +90,25 @@ file(
       url: 'git+https://github.com/grynyk/dgkit.git',
       directory: `packages/${name}`,
     },
-    keywords: ['angular', 'standalone', 'ssr', name, 'dgkit'],
+    // Angular-specific keywords would be actively misleading on a package that
+    // has no framework dependency — and they are what a consumer sees first on
+    // npm. Pure packages describe themselves instead.
+    keywords: pure
+      ? [name, 'dgkit']
+      : ['angular', 'standalone', 'ssr', name, 'dgkit'],
     sideEffects: false,
-    // The publishable artifact is the ng-packagr output in dist/packages/<name>;
+    // The publishable artifact is the build output in dist/packages/<name>;
     // tools/publish-dist.mjs publishes those built directories directly.
     publishConfig: { access: 'public' },
-    ...(pure ? {} : { peerDependencies: reference.peerDependencies }),
-    dependencies: { tslib: '^2.3.0' },
+    ...(pure
+      ? {}
+      : {
+          peerDependencies: reference.peerDependencies,
+          // ng-packagr's Angular output emits tslib helper imports. The tsup
+          // build used for pure packages inlines what little it needs, so a
+          // pure package genuinely ships zero runtime dependencies.
+          dependencies: { tslib: '^2.3.0' },
+        }),
   }),
 );
 
@@ -104,7 +125,13 @@ file(
         executor: 'nx:run-commands',
         outputs: [`{workspaceRoot}/dist/packages/${name}`],
         options: {
-          command: `ng-packagr -p packages/${name}/ng-package.json -c packages/${name}/tsconfig.lib.json`,
+          // Angular packages need the Angular Package Format (ESM-only by
+          // design). Pure packages are bundled with tsup instead, so they ship
+          // CommonJS alongside ESM and work in Node services that still
+          // `require()`.
+          command: pure
+            ? `node tools/build-pure-package.mjs ${name}`
+            : `ng-packagr -p packages/${name}/ng-package.json -c packages/${name}/tsconfig.lib.json`,
         },
       },
       test: {
@@ -132,15 +159,20 @@ file(
   }),
 );
 
-file(
-  'ng-package.json',
-  json({
-    $schema: '../../node_modules/ng-packagr/ng-package.schema.json',
-    dest: `../../dist/packages/${name}`,
-    assets: ['./README.md', './CHANGELOG.md'],
-    lib: { entryFile: 'src/index.ts' },
-  }),
-);
+// Only Angular packages are built by ng-packagr; a pure package has no use for
+// its config, and leaving a dead one behind is how a "pure" package quietly
+// gets built as an Angular one.
+if (!pure) {
+  file(
+    'ng-package.json',
+    json({
+      $schema: '../../node_modules/ng-packagr/ng-package.schema.json',
+      dest: `../../dist/packages/${name}`,
+      assets: ['./README.md', './CHANGELOG.md'],
+      lib: { entryFile: 'src/index.ts' },
+    }),
+  );
+}
 
 file(
   'tsconfig.json',
@@ -167,7 +199,7 @@ file(
       inlineSources: true,
       types: [],
     },
-    angularCompilerOptions: { compilationMode: 'partial' },
+    ...(pure ? {} : { angularCompilerOptions: { compilationMode: 'partial' } }),
     include: ['src/**/*.ts'],
     exclude: [
       'src/**/*.spec.ts',
@@ -195,15 +227,47 @@ file(
     include: [
       'src/**/*.spec.ts',
       'src/**/testing/**/*.ts',
-      'src/test-setup.ts',
+      // A pure package has no Angular test bed to bootstrap.
+      ...(pure ? [] : ['src/test-setup.ts']),
       'vitest.config.ts',
     ],
   }),
 );
 
+const coverage = `    coverage: {
+      provider: 'v8',
+      reportsDirectory: '../../coverage/packages/${name}',
+      reporter: ['text', 'lcov'],
+      include: ['src/lib/**/*.ts'],
+      exclude: [
+        'src/lib/**/*.spec.ts',
+        'src/lib/**/*.types.ts',
+        'src/lib/testing/**',
+      ],
+      thresholds: { statements: 95, branches: 90, functions: 95, lines: 95 },
+    },`;
+
 file(
   'vitest.config.ts',
-  `/// <reference types="vitest" />
+  pure
+    ? `/// <reference types="vitest" />
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitest/config';
+
+const root = fileURLToPath(new URL('.', import.meta.url));
+
+export default defineConfig({
+  root,
+  test: {
+    // Framework-free package — no Angular, no DOM, no test bed to bootstrap.
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.spec.ts'],
+${coverage}
+  },
+});
+`
+    : `/// <reference types="vitest" />
 import { fileURLToPath } from 'node:url';
 import angular from '@analogjs/vite-plugin-angular';
 import { defineConfig } from 'vitest/config';
@@ -224,26 +288,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['src/test-setup.ts'],
     include: ['src/**/*.spec.ts'],
-    coverage: {
-      provider: 'v8',
-      reportsDirectory: '../../coverage/packages/${name}',
-      reporter: ['text', 'lcov'],
-      include: ['src/lib/**/*.ts'],
-      exclude: [
-        'src/lib/**/*.spec.ts',
-        'src/lib/**/*.types.ts',
-        'src/lib/testing/**',
-      ],
-      thresholds: { statements: 95, branches: 90, functions: 95, lines: 95 },
-    },
+${coverage}
   },
 });
 `,
 );
 
-file(
-  'src/test-setup.ts',
-  `import '@analogjs/vitest-angular/setup-zone';
+if (!pure) {
+  file(
+    'src/test-setup.ts',
+    `import '@analogjs/vitest-angular/setup-zone';
 
 import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
@@ -260,7 +314,8 @@ getTestBed().initTestEnvironment(
   platformBrowserTesting(),
 );
 `,
-);
+  );
+}
 
 file('src/index.ts', `export { ${camel} } from './lib/${name}';\n`);
 

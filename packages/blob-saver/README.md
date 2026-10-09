@@ -33,6 +33,9 @@ yarn add @dgkit/blob-saver
 > dependencies, so it works with **any Angular version** (or React, Vue,
 > plain Node… anywhere JavaScript runs).
 
+Ships **both ESM and CommonJS**, so it works whether you `import` it or
+`require()` it, with type declarations for each. **Node 18+.**
+
 ## Usage
 
 ```ts

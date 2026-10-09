@@ -1,7 +1,7 @@
 {
   "name": "@dgkit/betting-math",
   "version": "0.3.0",
-  "description": "Pure, exact-rational sports-betting math: odds format conversion, system bet combinatorics, dead heat reduction, Rule 4 deductions, void-leg collapse, each-way settlement, Asian handicap splitting, and cash-out estimates.",
+  "description": "Exact-rational sports-betting math: odds conversion, market analysis, arbitrage, expected value and Kelly staking, hedging, matched-betting and promo mechanics, system-bet settlement, cash-out estimates, and affiliate commission economics.",
   "author": {
     "name": "Danylo Grynyk",
     "email": "danielgrynyk@gmail.com"
@@ -17,17 +17,20 @@
     "directory": "packages/betting-math"
   },
   "keywords": [
-    "angular",
-    "standalone",
-    "ssr",
+    "betting",
+    "sports-betting",
+    "odds",
+    "bookmaker",
+    "settlement",
+    "arbitrage",
+    "kelly-criterion",
+    "exact-arithmetic",
+    "rational-arithmetic",
     "betting-math",
     "dgkit"
   ],
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
   }
 }

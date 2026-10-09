@@ -75,3 +75,37 @@ jobs:
             '
             echo "::endgroup::"
           done
+
+  smoke:
+    name: Load built packages (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['18', '20', '22', '24']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Build with the repo's own Node (Angular's toolchain sets the floor),
+      # then switch runtimes below to check the artifacts actually load on the
+      # versions the pure packages claim to support.
+      - name: Setup Node & Yarn
+        uses: ./.github/actions/setup
+      - name: Build all packages
+        run: yarn nx run-many -t build
+
+      - name: Switch to Node ${{ matrix.node }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+
+      # `npm pack --dry-run` above checks what goes into the tarball. This packs
+      # each built package, installs it into a throwaway project, and requires
+      # and imports it for real — the check that would have caught the pure
+      # packages shipping ESM-only, which resolves fine on new Node via
+      # require(esm) and fails outright on 18 and 20.
+      - name: Require + import each built package
+        run: node tools/smoke-test-dist.mjs
