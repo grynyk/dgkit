@@ -1,6 +1,6 @@
 {
   "name": "@dgkit/betting-math",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Exact-rational sports-betting math: odds conversion, market analysis, arbitrage, expected value and Kelly staking, hedging, matched-betting and promo mechanics, system-bet settlement, cash-out estimates, and affiliate commission economics.",
   "author": {
     "name": "Danylo Grynyk",
